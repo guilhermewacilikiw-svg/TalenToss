@@ -1,6 +1,8 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /app
+
+RUN apt-get update -y && apt-get install -y openssl
 
 # Install only backend dependencies
 COPY backend/package*.json ./backend/
