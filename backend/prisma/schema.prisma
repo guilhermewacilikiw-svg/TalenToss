@@ -1,0 +1,151 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"] // Enable pgvector
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [vector]
+}
+
+enum Role {
+  ADMIN
+  COMPANY
+  RECRUITER
+  MANAGER
+  INTERVIEWER
+  CANDIDATE
+}
+
+enum JobStatus {
+  OPEN
+  CLOSED
+  DRAFT
+  ARCHIVED
+}
+
+enum AppStatus {
+  APPLIED
+  SCREENING
+  INTERVIEW
+  OFFER
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(CANDIDATE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  companyProfile   Company?
+  candidateProfile Candidate?
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  logoUrl     String?
+  credits     Int      @default(1)
+  plan        String   @default("FREE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  googleAccessToken  String?
+  googleRefreshToken String?
+  
+  jobs               Job[]
+  interviews         Interview[]
+}
+
+model Candidate {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName          String
+  lastName           String
+  headline           String?
+  summary            String?
+  phone              String?
+  location           String?
+  linkedinUrl        String?
+  githubUrl          String?
+  skills             String[] // Array of strings
+  experiences        Json?    // Array of objects { company, position, startDate, endDate, description }
+  education          Json?    // Array of objects { institution, course, startDate, endDate, description }
+  courses            Json?
+  salaryExpectation  String?
+  workModel          String?  // Remoto, Híbrido, Presencial
+  employabilityScore Int?
+  resumeUrl          String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  
+  // Vector Embeddings para Matching com IA
+  profileVector Unsupported("vector(768)")? 
+
+  applications       Application[]
+  interviews         Interview[]
+}
+
+model Job {
+  id           String   @id @default(uuid())
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title        String
+  description  String
+  status       JobStatus @default(DRAFT)
+  requirements String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Vector Embeddings para Busca e Matching
+  jobVector Unsupported("vector(768)")?
+  
+  applications Application[]
+  interviews   Interview[]
+}
+
+model Application {
+  id          String    @id @default(uuid())
+  jobId       String
+  job         Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  status      AppStatus @default(APPLIED)
+  
+  matchScore  Float?    // Gerado pela IA
+  aiAnalysis  String?   // Parecer da IA sobre o match
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([jobId, candidateId])
+}
+
+model Interview {
+  id            String   @id @default(uuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  candidateId   String
+  candidate     Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  jobId         String
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  date          DateTime
+  time          String
+  googleEventId String?
+  meetLink      String?
+  status        String   @default("scheduled") // scheduled, completed, canceled
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
