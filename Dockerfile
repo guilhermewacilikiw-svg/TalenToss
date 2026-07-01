@@ -2,32 +2,20 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies for both apps
+# Install only backend dependencies
 COPY backend/package*.json ./backend/
-COPY frontend/package*.json ./frontend/
-
 RUN cd backend && npm install
-RUN cd frontend && npm install
 
-# Copy source code
+# Copy backend source
 COPY backend ./backend/
-COPY frontend ./frontend/
 
-# Generate Prisma client and build backend
+# Build backend
 RUN cd backend && npx prisma generate && npm run build
 
-# Build frontend
-# We set the NEXT_PUBLIC_API_URL so it compiles expecting the backend at the same domain
-RUN cd frontend && NEXT_PUBLIC_API_URL="" npm run build
-
-# Copy start script
-COPY start.sh ./
-RUN chmod +x ./start.sh
-
-# Install concurrently to run both servers
-RUN npm install -g concurrently
-
-# HuggingFace spaces expose port 7860
+# Expose the HuggingFace required port
 EXPOSE 7860
 
-CMD ["./start.sh"]
+# Tell NestJS to run on port 7860
+ENV PORT=7860
+
+CMD ["sh", "-c", "cd backend && npm run start:prod"]
