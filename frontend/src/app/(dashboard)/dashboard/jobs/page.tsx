@@ -85,11 +85,7 @@ export default function JobsPage() {
           </p>
         </div>
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <SheetTrigger asChild>
-            <Button className="bg-[#111827] text-white hover:bg-[#111827]/90 rounded-full px-5 py-2 font-semibold text-xs tracking-wider uppercase shadow-sm border-0">
-              <Plus className="w-3.5 h-3.5 mr-1.5" /> Criar Nova Vaga
-            </Button>
-          </SheetTrigger>
+          <SheetTrigger render={<Button className="bg-[#111827] text-white hover:bg-[#111827]/90 rounded-full px-5 py-2 font-semibold text-xs tracking-wider uppercase shadow-sm border-0"><Plus className="w-3.5 h-3.5 mr-1.5" /> Criar Nova Vaga</Button>} />
           <SheetContent className="sm:max-w-[520px]">
             <SheetHeader className="pb-4 border-b">
               <SheetTitle className="text-lg font-bold">Cadastrar Nova Vaga</SheetTitle>
