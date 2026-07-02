@@ -14,6 +14,7 @@ export default function CompanySettings() {
   const [companyId, setCompanyId] = useState<string>('');
   const [formData, setFormData] = useState({
     name: '',
+    tradeName: '',
     description: '',
     logoUrl: ''
   });
@@ -29,6 +30,7 @@ export default function CompanySettings() {
         setCompanyId(res.data.id);
         setFormData({
           name: res.data.name || '',
+          tradeName: res.data.tradeName || '',
           description: res.data.description || '',
           logoUrl: res.data.logoUrl || ''
         });
@@ -72,14 +74,25 @@ export default function CompanySettings() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Nome da Empresa</Label>
-              <Input 
-                id="name" 
-                value={formData.name}
-                onChange={e => setFormData({...formData, name: e.target.value})}
-                required
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Razão Social</Label>
+                <Input 
+                  id="name" 
+                  value={formData.name}
+                  disabled
+                  title="A Razão Social não pode ser alterada após o cadastro."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tradeName">Nome Fantasia</Label>
+                <Input 
+                  id="tradeName" 
+                  value={formData.tradeName}
+                  disabled
+                  title="O Nome Fantasia não pode ser alterado após o cadastro."
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Sobre a Empresa (Descrição)</Label>

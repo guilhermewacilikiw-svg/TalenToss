@@ -15,13 +15,23 @@ export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);
   const [role, setRole] = useState('CANDIDATE'); // CANDIDATE ou COMPANY
   const [errorMsg, setErrorMsg] = useState('');
+  
+  // New fields
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [cnpj, setCnpj] = useState('');
+  const [corporateName, setCorporateName] = useState('');
+  const [tradeName, setTradeName] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     try {
       if (isRegister) {
-        await api.post('/auth/register', { email, password, role });
+        await api.post('/auth/register', { 
+          email, password, role,
+          firstName, lastName, cnpj, corporateName, tradeName
+        });
       }
       const res = await api.post('/auth/login', { email, password });
       
@@ -69,13 +79,41 @@ export default function LoginPage() {
             <div>
               <Label>Tipo de Conta</Label>
               <select 
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background mb-4"
                 value={role} 
                 onChange={(e) => setRole(e.target.value)}
               >
                 <option value="CANDIDATE">Candidato</option>
                 <option value="COMPANY">Empresa</option>
               </select>
+              
+              {role === 'CANDIDATE' ? (
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="firstName">Nome</Label>
+                    <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName">Sobrenome</Label>
+                    <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="cnpj">CNPJ</Label>
+                    <Input id="cnpj" placeholder="XX.XXX.XXX/0001-XX" value={cnpj} onChange={(e) => setCnpj(e.target.value)} required />
+                  </div>
+                  <div>
+                    <Label htmlFor="corporateName">Razão Social</Label>
+                    <Input id="corporateName" placeholder="Sua Empresa LTDA" value={corporateName} onChange={(e) => setCorporateName(e.target.value)} required />
+                  </div>
+                  <div>
+                    <Label htmlFor="tradeName">Nome Fantasia</Label>
+                    <Input id="tradeName" placeholder="Sua Empresa" value={tradeName} onChange={(e) => setTradeName(e.target.value)} required />
+                  </div>
+                </div>
+              )}
             </div>
           )}
           <Button type="submit" className="w-full">

@@ -27,8 +27,8 @@ export class CandidatesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('COMPANY', 'ADMIN')
   @Get()
-  async findAll() {
-    return this.candidatesService.findAll();
+  async findAll(@Request() req: any) {
+    return this.candidatesService.findAll(req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)

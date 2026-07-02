@@ -19,18 +19,20 @@ export class UsersService {
         email: data.email,
         password: data.password,
         role: role,
-        ...(role === 'CANDIDATE' && data.firstName && data.lastName && {
+        ...(role === 'CANDIDATE' && {
           candidateProfile: {
             create: {
-              firstName: data.firstName,
-              lastName: data.lastName,
+              firstName: data.firstName || '',
+              lastName: data.lastName || '',
             },
           },
         }),
         ...(role === 'COMPANY' && {
           companyProfile: {
             create: {
-              name: data.firstName ? `${data.firstName} ${data.lastName || ''}`.trim() : 'Nova Empresa',
+              name: data.corporateName || data.name || 'Nova Empresa',
+              tradeName: data.tradeName || '',
+              cnpj: data.cnpj || '',
             },
           },
         }),

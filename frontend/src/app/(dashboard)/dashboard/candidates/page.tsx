@@ -12,6 +12,7 @@ export default function CandidatesBankPage() {
   const [candidates, setCandidates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [isPremiumLocked, setIsPremiumLocked] = useState(false);
 
   useEffect(() => {
     loadCandidates();
@@ -21,7 +22,10 @@ export default function CandidatesBankPage() {
     try {
       const res = await api.get('/candidates');
       setCandidates(res.data);
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.response?.status === 403) {
+        setIsPremiumLocked(true);
+      }
       console.error(err);
     } finally {
       setLoading(false);
@@ -33,6 +37,25 @@ export default function CandidatesBankPage() {
     c.lastName?.toLowerCase().includes(search.toLowerCase()) || 
     c.headline?.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (isPremiumLocked) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 space-y-6">
+        <div className="w-20 h-20 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mb-4">
+          <Star className="w-10 h-10" />
+        </div>
+        <h2 className="text-3xl font-bold tracking-tight">Recurso Premium</h2>
+        <p className="text-muted-foreground max-w-md text-lg">
+          O Banco de Talentos é exclusivo para assinantes Premium. Faça o upgrade para buscar proativamente os melhores talentos na plataforma.
+        </p>
+        <Link href="/dashboard/plans">
+          <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-white shadow-md">
+            Ver Planos e Fazer Upgrade
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

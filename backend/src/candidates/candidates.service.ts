@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AiService } from '../ai/ai.service';
 import * as fs from 'fs';
@@ -173,7 +173,15 @@ export class CandidatesService {
     });
   }
 
-  async findAll() {
+  async findAll(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, include: { companyProfile: true } });
+    
+    if (user?.role === 'COMPANY') {
+      if (user.companyProfile?.plan !== 'PREMIUM') {
+        throw new ForbiddenException('Acesso ao Banco de Talentos é exclusivo para assinantes Premium.');
+      }
+    }
+
     return this.prisma.candidate.findMany({
       include: { user: { select: { email: true } } },
       orderBy: { employabilityScore: 'desc' }

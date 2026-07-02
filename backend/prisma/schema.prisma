@@ -54,6 +54,8 @@ model Company {
   userId      String   @unique
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name        String
+  tradeName   String?
+  cnpj        String?  @unique
   description String?
   logoUrl     String?
   credits     Int      @default(1)
