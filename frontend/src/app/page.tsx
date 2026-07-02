@@ -210,6 +210,7 @@ function EmpresaView() {
 function CandidatoView() {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-3 duration-500">
+      {/* Hero Section */}
       <section className="relative py-28 overflow-hidden bg-white">
         <div className="container mx-auto px-6 text-center max-w-4xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50/60 border border-green-100 text-xs font-semibold text-green-600 mb-8 tracking-wider uppercase">
@@ -228,12 +229,29 @@ function CandidatoView() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
+            <a href="#como-funciona-candidato" className="text-sm font-semibold text-gray-500 hover:text-gray-900 py-3 px-6 transition-colors">
+              Como funciona →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof */}
+      <section className="py-12 border-y border-gray-100 bg-[#F5F7FA]">
+        <div className="container mx-auto px-6 text-center">
+          <p className="text-xs uppercase font-bold tracking-widest text-gray-400 mb-6">Nossos candidatos são contratados por empresas líderes</p>
+          <div className="flex flex-wrap items-center justify-center gap-12 grayscale opacity-50">
+            <span className="font-extrabold text-lg tracking-tight">BREX</span>
+            <span className="font-extrabold text-lg tracking-tight">VERCEL</span>
+            <span className="font-extrabold text-lg tracking-tight">MERCURY</span>
+            <span className="font-extrabold text-lg tracking-tight">STRIPE</span>
+            <span className="font-extrabold text-lg tracking-tight">LINEAR</span>
           </div>
         </div>
       </section>
 
       {/* Como Funciona para Candidatos */}
-      <section className="py-24 bg-[#F5F7FA] border-t border-gray-100">
+      <section id="como-funciona-candidato" className="py-24 bg-white">
         <div className="container mx-auto px-6 max-w-5xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 mb-4">Seu Perfil Conectado em Minutos</h2>
@@ -241,20 +259,60 @@ function CandidatoView() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl border border-gray-200/50 bg-white">
+            <div className="p-8 rounded-2xl border border-gray-100/80 bg-white hover:shadow-lg hover:border-gray-200/50 transition-all duration-300">
               <div className="w-10 h-10 rounded-xl bg-green-50/50 text-green-600 flex items-center justify-center mb-6 font-bold text-sm">01</div>
               <h3 className="text-lg font-bold mb-3 text-gray-900">Faça o Upload</h3>
-              <p className="text-sm text-gray-500 font-medium leading-relaxed">Nossa tecnologia de extração léxica lê todo o conteúdo de texto do seu arquivo PDF em poucos milissegundos.</p>
+              <p className="text-sm text-gray-500 font-medium leading-relaxed">Nossa tecnologia de extração lê o conteúdo de texto do seu arquivo PDF em poucos milissegundos.</p>
             </div>
-            <div className="p-8 rounded-2xl border border-gray-200/50 bg-white">
+            <div className="p-8 rounded-2xl border border-gray-100/80 bg-white hover:shadow-lg hover:border-gray-200/50 transition-all duration-300">
               <div className="w-10 h-10 rounded-xl bg-green-50/50 text-green-600 flex items-center justify-center mb-6 font-bold text-sm">02</div>
               <h3 className="text-lg font-bold mb-3 text-gray-900">Preenchimento IA</h3>
               <p className="text-sm text-gray-500 font-medium leading-relaxed">A IA cria uma bio profissional, extrai suas competências-chave e formata suas experiências de maneira organizada.</p>
             </div>
-            <div className="p-8 rounded-2xl border border-gray-200/50 bg-white">
+            <div className="p-8 rounded-2xl border border-gray-100/80 bg-white hover:shadow-lg hover:border-gray-200/50 transition-all duration-300">
               <div className="w-10 h-10 rounded-xl bg-green-50/50 text-green-600 flex items-center justify-center mb-6 font-bold text-sm">03</div>
               <h3 className="text-lg font-bold mb-3 text-gray-900">Agende de Volta</h3>
               <p className="text-sm text-gray-500 font-medium leading-relaxed">Quando uma empresa der match com seu perfil, agende sua entrevista no calendário dela com apenas um clique.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Recurso Destaque IA para Candidatos */}
+      <section className="py-24 bg-[#F5F7FA] border-t border-gray-100">
+        <div className="container mx-auto px-6 max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <span className="premium-badge bg-green-50 text-green-700 border border-green-100">Parser Inteligente</span>
+              <h3 className="text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">Valorização máxima do seu currículo</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                Nossa IA não se limita a copiar e colar dados. Ela reorganiza suas conquistas profissionais, infere competências técnicas correlacionadas e escreve um resumo profissional otimizado para motores de busca internos de grandes empresas.
+              </p>
+              <ul className="space-y-3 font-semibold text-sm text-gray-700">
+                <li className="flex items-center gap-2"><Target className="w-4 h-4 text-green-600" /> Cálculo automático de score de empregabilidade</li>
+                <li className="flex items-center gap-2"><Shield className="w-4 h-4 text-green-600" /> Controle total dos seus dados de contato</li>
+                <li className="flex items-center gap-2"><Cpu className="w-4 h-4 text-green-600" /> Atualização em tempo real ao subir novos PDFs</li>
+              </ul>
+            </div>
+            
+            <div className="p-6 bg-white border border-gray-200/60 rounded-2xl shadow-sm">
+              <div className="flex items-center justify-between pb-4 border-b border-gray-100 mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></div>
+                  <span className="text-xs font-bold text-gray-600">PARSER IA COMPLETO</span>
+                </div>
+                <span className="text-xs font-bold text-green-600">Score 94%</span>
+              </div>
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-100 rounded w-5/6"></div>
+                <div className="h-3 bg-gray-100 rounded w-2/3"></div>
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">React</span>
+                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">Next.js</span>
+                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">TailwindCSS</span>
+                </div>
+                <div className="h-3 bg-gray-100 rounded w-full"></div>
+              </div>
             </div>
           </div>
         </div>
