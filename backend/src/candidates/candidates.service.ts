@@ -49,6 +49,21 @@ export class CandidatesService {
       include: { user: true }
     });
     
+    // Apagar o currículo antigo do disco se existir (Manter apenas o mais recente)
+    if (candidate && candidate.resumeUrl) {
+      try {
+        const oldFileName = candidate.resumeUrl.split('/').pop();
+        if (oldFileName) {
+          const oldFilePath = path.join(uploadDir, oldFileName);
+          if (fs.existsSync(oldFilePath)) {
+            fs.unlinkSync(oldFilePath);
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao apagar curriculo antigo:', err);
+      }
+    }
+
     if (!candidate) {
       const user = await this.prisma.user.findUnique({ where: { id: userId } });
       const emailPrefix = user?.email.split('@')[0] || 'Candidato';
