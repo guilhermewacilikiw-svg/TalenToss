@@ -15,7 +15,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-gray-100/80 bg-white/80 backdrop-blur-md">
         <div className="container mx-auto px-6 h-24 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Logo width={165} height={48} />
+            <Logo width={195} height={56} />
           </div>
 
           <div className="hidden md:flex bg-gray-100/90 p-1 rounded-full border border-gray-200/50">
@@ -79,7 +79,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-gray-200/60 py-12 bg-white mt-auto">
         <div className="container mx-auto px-6 max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <Logo width={120} height={35} />
+          <Logo width={150} height={42} />
           <p className="text-xs font-medium text-gray-400">
             &copy; {new Date().getFullYear()} TalenToss Inc. A inteligência artificial que simplifica o recrutamento global.
           </p>

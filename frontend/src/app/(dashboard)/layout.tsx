@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="flex min-h-screen w-full bg-[#F5F7FA] text-foreground font-sans">
       <aside className="w-64 flex flex-col border-r border-gray-100 bg-white">
         <div className="p-6 border-b border-gray-100 flex items-center justify-center">
-          <Logo width={130} height={36} />
+          <Logo width={165} height={48} />
         </div>
         <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => {

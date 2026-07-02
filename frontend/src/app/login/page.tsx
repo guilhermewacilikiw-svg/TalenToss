@@ -61,7 +61,7 @@ export default function LoginPage() {
         
         {/* Logo and Header */}
         <div className="flex flex-col items-center justify-center mb-8">
-          <Logo width={120} height={35} className="mb-6" />
+          <Logo width={160} height={46} className="mb-6" />
           <h1 className="text-xl font-bold tracking-tight text-gray-900">
             {isRegister ? 'Crie sua conta no TalenToss' : 'Acesse sua conta'}
           </h1>
