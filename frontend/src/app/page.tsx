@@ -120,18 +120,18 @@ function EmpresaView() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
               <div className="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center mb-6 font-bold text-xl">1</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Crie a Vaga</h3>
-              <p className="text-gray-500 font-medium leading-relaxed">Descreva os requisitos. Não se preocupe com formatação, a IA entende o contexto semântico.</p>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Crie sua Conta</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">Cadastre sua empresa de forma segura informando o CNPJ e a Razão Social real.</p>
             </div>
             <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
               <div className="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center mb-6 font-bold text-xl">2</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Match Perfeito</h3>
-              <p className="text-gray-500 font-medium leading-relaxed">Usando PgVector, convertemos sua vaga em embeddings matemáticos e cruzamos com milhares de candidatos instantaneamente.</p>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Crie a Vaga com IA</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">Apenas cole o texto bruto da vaga. Nossa Inteligência Artificial lê e organiza todos os requisitos para você magicamente.</p>
             </div>
             <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
               <div className="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center mb-6 font-bold text-xl">3</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Contrate Rápido</h3>
-              <p className="text-gray-500 font-medium leading-relaxed">Acesse a lista ranqueada por porcentagem de compatibilidade. Analise os perfis filtrados e feche a contratação.</p>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Busque Talentos</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">Sendo Premium, você ganha acesso exclusivo ao Banco de Talentos para pesquisar profissionais no momento em que precisar.</p>
             </div>
           </div>
         </div>
@@ -172,18 +172,18 @@ function CandidatoView() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
               <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center mb-6 font-bold text-xl">1</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Upload do PDF</h3>
-              <p className="text-gray-500 font-medium leading-relaxed">Cadastre-se e jogue seu currículo na tela. Você não precisa digitar suas experiências manualmente de novo.</p>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Crie sua Conta</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">Faça um cadastro simples e rápido para iniciar sua jornada em busca da vaga dos sonhos.</p>
             </div>
             <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
               <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center mb-6 font-bold text-xl">2</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Análise Inteligente</h3>
-              <p className="text-gray-500 font-medium leading-relaxed">Nossa IA avançada extrairá suas Habilidades e gerará um Score de Empregabilidade exclusivo baseado no seu perfil.</p>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Preenchimento Mágico</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">Envie o PDF do seu currículo e veja a mágica acontecer: a IA preenche todo o seu perfil sozinha!</p>
             </div>
             <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
               <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center mb-6 font-bold text-xl">3</div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Vagas Recomendadas</h3>
-              <p className="text-gray-500 font-medium leading-relaxed">O TalenToss cruza seu perfil vetorial com as empresas e entrega as vagas exatas onde você se encaixa perfeitamente.</p>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Encontre Vagas</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">O sistema combina seu perfil com as vagas certas. E o melhor: faça ajustes rápidos atualizando seu PDF quando quiser!</p>
             </div>
           </div>
         </div>
