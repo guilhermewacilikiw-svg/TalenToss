@@ -121,19 +121,6 @@ function EmpresaView() {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="py-12 border-y border-gray-100 bg-[#F5F7FA]">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-xs uppercase font-bold tracking-widest text-gray-400 mb-6">Integrado com as melhores ferramentas</p>
-          <div className="flex flex-wrap items-center justify-center gap-12 grayscale opacity-50">
-            <span className="font-extrabold text-lg tracking-tight">WHATSAPP</span>
-            <span className="font-extrabold text-lg tracking-tight">LINKEDIN</span>
-            <span className="font-extrabold text-lg tracking-tight">EMAIL</span>
-            <span className="font-extrabold text-lg tracking-tight">EXCEL</span>
-            <span className="font-extrabold text-lg tracking-tight">GOOGLE MEET</span>
-          </div>
-        </div>
-      </section>
 
       {/* Como Funciona */}
       <section id="como-funciona" className="py-24 bg-white">
@@ -235,19 +222,6 @@ function CandidatoView() {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="py-12 border-y border-gray-100 bg-[#F5F7FA]">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-xs uppercase font-bold tracking-widest text-gray-400 mb-6">Nossos candidatos são contratados por empresas líderes</p>
-          <div className="flex flex-wrap items-center justify-center gap-12 grayscale opacity-50">
-            <span className="font-extrabold text-lg tracking-tight">BREX</span>
-            <span className="font-extrabold text-lg tracking-tight">VERCEL</span>
-            <span className="font-extrabold text-lg tracking-tight">MERCURY</span>
-            <span className="font-extrabold text-lg tracking-tight">STRIPE</span>
-            <span className="font-extrabold text-lg tracking-tight">LINEAR</span>
-          </div>
-        </div>
-      </section>
 
       {/* Como Funciona para Candidatos */}
       <section id="como-funciona-candidato" className="py-24 bg-white">
