@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BrainCircuit, Building2, UserCircle, Target, Shield, Cpu } from "lucide-react";
+import { ArrowRight, BrainCircuit, Building2, UserCircle, Target, Shield, Cpu, Zap } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export default function Home() {
