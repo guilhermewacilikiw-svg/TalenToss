@@ -389,6 +389,61 @@ export default function CandidateDashboard() {
 
                 {/* Direita: Resumo e Linha do Tempo */}
                 <div className="col-span-1 md:col-span-2 space-y-8">
+                  {/* Sessão do Currículo Original (PDF) */}
+                  <section className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                      <h4 className="text-sm font-bold text-blue-900 mb-1 flex items-center gap-2">
+                        <FileText className="w-4 h-4" /> Currículo Anexado (PDF)
+                      </h4>
+                      <p className="text-xs text-blue-800">
+                        Este é o currículo utilizado para preencher seu perfil. Ao fazer upload de um novo, o antigo é automaticamente apagado.
+                      </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                      {profileData?.resumeUrl ? (
+                        <a href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}${profileData.resumeUrl}`} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
+                          <Button variant="outline" className="w-full bg-white border-blue-200 text-blue-700 hover:bg-blue-50">
+                            Ver PDF Atual
+                          </Button>
+                        </a>
+                      ) : (
+                        <span className="text-xs text-gray-500 italic">Nenhum anexo.</span>
+                      )}
+                      
+                      <input 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={async (e) => {
+                          if (e.target.files && e.target.files.length > 0) {
+                            const newFile = e.target.files[0];
+                            setIsUploading(true);
+                            const formData = new FormData();
+                            formData.append('resume', newFile);
+                            try {
+                              const res = await api.post('/candidates/upload-resume', formData, {
+                                headers: { 'Content-Type': 'multipart/form-data' }
+                              });
+                              setProfileData({ ...res.data, experiences: res.data.experiences || [], education: res.data.education || [], skills: res.data.skills || [] });
+                              alert("Currículo atualizado com sucesso! Os dados do seu perfil foram recarregados com base no novo arquivo.");
+                            } catch (err) {
+                              console.error(err);
+                              alert("Erro ao enviar novo currículo.");
+                            } finally {
+                              setIsUploading(false);
+                            }
+                          }
+                        }} 
+                        className="hidden" 
+                        id="resume-replace" 
+                      />
+                      <label htmlFor="resume-replace" className="w-full sm:w-auto">
+                        <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isUploading} type="button" onClick={() => document.getElementById('resume-replace')?.click()}>
+                          {isUploading ? 'Analisando Novo PDF...' : 'Substituir Currículo'}
+                        </Button>
+                      </label>
+                    </div>
+                  </section>
+
                   <section>
                     <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center"><Bot className="w-5 h-5 mr-2 text-primary" /> Bio (Resumo da IA)</h4>
                     <p className="text-gray-600 text-sm leading-relaxed bg-gray-50 p-4 rounded-xl">
