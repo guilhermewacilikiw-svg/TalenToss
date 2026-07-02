@@ -79,36 +79,30 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="email" className="text-xs font-bold text-gray-700">E-mail</Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input 
-                id="email" 
-                type="email" 
-                placeholder="Ex: seuemail@empresa.com"
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
-                disabled={isLoading} 
-                className="pl-9 h-10 premium-input w-full"
-              />
-            </div>
+            <Input 
+              id="email" 
+              type="email" 
+              placeholder="Ex: seuemail@empresa.com"
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+              disabled={isLoading} 
+              className="h-10 premium-input w-full"
+            />
           </div>
 
           <div className="space-y-1.5">
             <Label htmlFor="password" className="text-xs font-bold text-gray-700">Senha</Label>
-            <div className="relative">
-              <KeyRound className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input 
-                id="password" 
-                type="password" 
-                placeholder="Sua senha secreta"
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-                disabled={isLoading} 
-                className="pl-9 h-10 premium-input w-full"
-              />
-            </div>
+            <Input 
+              id="password" 
+              type="password" 
+              placeholder="Sua senha secreta"
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+              disabled={isLoading} 
+              className="h-10 premium-input w-full"
+            />
           </div>
 
           {isRegister && (
