@@ -126,10 +126,10 @@ function EmpresaView() {
         <div className="container mx-auto px-6 text-center">
           <p className="text-xs uppercase font-bold tracking-widest text-gray-400 mb-6">Integrado com as melhores ferramentas</p>
           <div className="flex flex-wrap items-center justify-center gap-12 grayscale opacity-50">
-            <span className="font-extrabold text-lg tracking-tight">SLACK</span>
-            <span className="font-extrabold text-lg tracking-tight">GITHUB</span>
-            <span className="font-extrabold text-lg tracking-tight">NOTION</span>
+            <span className="font-extrabold text-lg tracking-tight">WHATSAPP</span>
             <span className="font-extrabold text-lg tracking-tight">LINKEDIN</span>
+            <span className="font-extrabold text-lg tracking-tight">EMAIL</span>
+            <span className="font-extrabold text-lg tracking-tight">EXCEL</span>
             <span className="font-extrabold text-lg tracking-tight">GOOGLE MEET</span>
           </div>
         </div>
@@ -168,10 +168,9 @@ function EmpresaView() {
         <div className="container mx-auto px-6 max-w-5xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <span className="premium-badge bg-primary/10 text-primary">Inteligência Semântica</span>
               <h3 className="text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">Chega de buscas por palavras-chave antigas</h3>
               <p className="text-gray-500 font-medium leading-relaxed">
-                Nossa busca de IA compreende conceitos e experiência prática. Se você busca um profissional de "React com Node", a IA saberá mapear habilidades correlatas como "Next.js", "TypeScript" e "Express", mesmo que não estejam literais no perfil.
+                Nossa busca de IA compreende conceitos e experiência prática. Se você busca um profissional de "Vendas B2B e CRM", a IA saberá mapear habilidades correlatas como "Negociação", "Gestão de Pipeline", "HubSpot" e "Salesforce", mesmo que não estejam literais no perfil.
               </p>
               <ul className="space-y-3 font-semibold text-sm text-gray-700">
                 <li className="flex items-center gap-2"><Target className="w-4 h-4 text-primary" /> Análise Comportamental Integrada</li>
@@ -191,8 +190,8 @@ function EmpresaView() {
                 <div className="h-4 bg-gray-100 rounded w-3/4"></div>
                 <div className="h-3 bg-gray-100 rounded w-1/2"></div>
                 <div className="h-8 bg-blue-50/50 border border-blue-100 rounded p-2 flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-primary tracking-wide">FIT TÉCNICO EXCELENTE</span>
-                  <span className="text-[10px] text-gray-500">Node, TS, AWS</span>
+                  <span className="text-[10px] font-bold text-primary tracking-wide">QUALIFICAÇÃO COMPLETA</span>
+                  <span className="text-[10px] text-gray-500">Salesforce, CRM, Pipeline</span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded w-5/6"></div>
               </div>
@@ -307,9 +306,9 @@ function CandidatoView() {
                 <div className="h-4 bg-gray-100 rounded w-5/6"></div>
                 <div className="h-3 bg-gray-100 rounded w-2/3"></div>
                 <div className="flex flex-wrap gap-1.5 pt-2">
-                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">React</span>
-                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">Next.js</span>
-                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">TailwindCSS</span>
+                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">Gestão Financeira</span>
+                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">Orçamento</span>
+                  <span className="px-2 py-0.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-bold rounded-full">Excel Avançado</span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded w-full"></div>
               </div>
