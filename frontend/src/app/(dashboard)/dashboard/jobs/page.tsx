@@ -65,8 +65,8 @@ export default function JobsPage() {
           <p className="text-muted-foreground">Gerencie as vagas da sua empresa e encontre os melhores talentos.</p>
         </div>
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <SheetTrigger render={<Button />}>
-            Criar Nova Vaga
+          <SheetTrigger asChild>
+            <Button>Criar Nova Vaga</Button>
           </SheetTrigger>
           <SheetContent className="sm:max-w-[500px]">
             <SheetHeader>

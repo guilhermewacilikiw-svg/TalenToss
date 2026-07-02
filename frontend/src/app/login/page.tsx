@@ -15,6 +15,7 @@ export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);
   const [role, setRole] = useState('CANDIDATE'); // CANDIDATE ou COMPANY
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   
   // New fields
   const [firstName, setFirstName] = useState('');
@@ -26,6 +27,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
+    setIsLoading(true);
     try {
       if (isRegister) {
         await api.post('/auth/register', { 
@@ -39,14 +41,16 @@ export default function LoginPage() {
       
       const loggedInRole = res.data.role;
       
-      if (loggedInRole === 'COMPANY') {
-        router.push('/dashboard/jobs');
+      if (loggedInRole === 'COMPANY' || loggedInRole === 'ADMIN') {
+        router.push('/dashboard');
       } else {
         router.push('/candidate/dashboard');
       }
     } catch (err: any) {
       setErrorMsg(err?.response?.data?.error || err?.response?.data?.message || 'Credenciais inválidas ou erro no servidor.');
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -69,11 +73,11 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="email">E-mail</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading} />
           </div>
           <div>
             <Label htmlFor="password">Senha</Label>
-            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={isLoading} />
           </div>
           {isRegister && (
             <div>
@@ -82,6 +86,7 @@ export default function LoginPage() {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background mb-4"
                 value={role} 
                 onChange={(e) => setRole(e.target.value)}
+                disabled={isLoading}
               >
                 <option value="CANDIDATE">Candidato</option>
                 <option value="COMPANY">Empresa</option>
@@ -91,36 +96,36 @@ export default function LoginPage() {
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="firstName">Nome</Label>
-                    <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                    <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required disabled={isLoading} />
                   </div>
                   <div>
                     <Label htmlFor="lastName">Sobrenome</Label>
-                    <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                    <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required disabled={isLoading} />
                   </div>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="cnpj">CNPJ</Label>
-                    <Input id="cnpj" placeholder="XX.XXX.XXX/0001-XX" value={cnpj} onChange={(e) => setCnpj(e.target.value)} required />
+                    <Input id="cnpj" placeholder="XX.XXX.XXX/0001-XX" value={cnpj} onChange={(e) => setCnpj(e.target.value)} required disabled={isLoading} />
                   </div>
                   <div>
                     <Label htmlFor="corporateName">Razão Social</Label>
-                    <Input id="corporateName" placeholder="Sua Empresa LTDA" value={corporateName} onChange={(e) => setCorporateName(e.target.value)} required />
+                    <Input id="corporateName" placeholder="Sua Empresa LTDA" value={corporateName} onChange={(e) => setCorporateName(e.target.value)} required disabled={isLoading} />
                   </div>
                   <div>
                     <Label htmlFor="tradeName">Nome Fantasia</Label>
-                    <Input id="tradeName" placeholder="Sua Empresa" value={tradeName} onChange={(e) => setTradeName(e.target.value)} required />
+                    <Input id="tradeName" placeholder="Sua Empresa" value={tradeName} onChange={(e) => setTradeName(e.target.value)} required disabled={isLoading} />
                   </div>
                 </div>
               )}
             </div>
           )}
-          <Button type="submit" className="w-full">
-            {isRegister ? 'Criar Conta' : 'Entrar'}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? 'Processando...' : (isRegister ? 'Criar Conta' : 'Entrar')}
           </Button>
           <div className="text-center mt-4">
-            <button type="button" onClick={() => setIsRegister(!isRegister)} className="text-sm text-primary underline">
+            <button type="button" onClick={() => setIsRegister(!isRegister)} className="text-sm text-primary underline" disabled={isLoading}>
               {isRegister ? 'Já tenho uma conta (Login)' : 'Criar nova conta'}
             </button>
           </div>

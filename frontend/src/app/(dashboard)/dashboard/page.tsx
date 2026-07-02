@@ -19,9 +19,11 @@ export default function DashboardOverview() {
           <p className="text-gray-500 mt-1 font-medium">Aqui está o resumo do seu recrutamento hoje.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button className="bg-primary text-white rounded-full px-6 font-medium shadow-sm hover:bg-primary/90">
-            <Plus className="w-4 h-4 mr-2" /> Nova Vaga
-          </Button>
+          <Link href="/dashboard/jobs?new=true">
+            <Button className="bg-primary text-white rounded-full px-6 font-medium shadow-sm hover:bg-primary/90">
+              <Plus className="w-4 h-4 mr-2" /> Nova Vaga
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -94,7 +96,9 @@ export default function DashboardOverview() {
         <Card className="rounded-2xl border-0 shadow-sm flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-lg font-bold">Matches em Destaque</CardTitle>
-            <Button variant="link" className="text-primary font-medium text-sm">Ver todos</Button>
+            <Link href="/dashboard/matches">
+              <Button variant="link" className="text-primary font-medium text-sm">Ver todos</Button>
+            </Link>
           </CardHeader>
           <CardContent className="flex-1">
             <div className="space-y-6 mt-4">

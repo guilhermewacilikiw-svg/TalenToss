@@ -22,8 +22,8 @@ export default function CandidateDashboard() {
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   
-  // Mock Stats
-  const stats = { jobs: 12, applications: 3, interviews: 1 };
+  // Dashboard stats
+  const stats = { jobs: 0, applications: 0, interviews: 0 };
 
   useEffect(() => {
     loadProfile();
