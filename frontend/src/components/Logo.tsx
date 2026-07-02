@@ -15,20 +15,42 @@ export function Logo({ className = "", width = 160, height = 45 }: LogoProps) {
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
       >
-        {/* Left Person (Lighter Blue) */}
-        <circle cx="18" cy="14" r="6" fill="#60A5FA" />
-        <path d="M 8 26 H 26 V 34 H 30 V 52 C 30 54 28 56 26 56 H 12 C 10 56 8 54 8 52 Z" fill="#60A5FA" />
+        {/* Left T (Blue) - Stripe/Framer style cantos arredondados e offset */}
+        <path 
+          d="M 14 18 H 32" 
+          stroke="#3B82F6" 
+          strokeWidth="5.5" 
+          strokeLinecap="round" 
+        />
+        <path 
+          d="M 23 18 V 38 C 23 40 25 42 27 42 H 38" 
+          stroke="#3B82F6" 
+          strokeWidth="5.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+        />
         
-        {/* Right Person (Darker Blue) */}
-        <circle cx="46" cy="14" r="6" fill="#3B82F6" />
-        <path d="M 56 26 H 38 V 34 H 34 V 52 C 34 54 36 56 38 56 H 52 C 54 56 56 54 56 52 Z" fill="#3B82F6" />
+        {/* Right T (Green) */}
+        <path 
+          d="M 28 14 H 46" 
+          stroke="#10B981" 
+          strokeWidth="5.5" 
+          strokeLinecap="round" 
+        />
+        <path 
+          d="M 37 14 V 30 C 37 32 39 34 41 34 H 52" 
+          stroke="#10B981" 
+          strokeWidth="5.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+        />
 
         {/* Text */}
         <text 
-          x="70" 
-          y="44" 
+          x="68" 
+          y="38" 
           fontFamily="system-ui, -apple-system, sans-serif" 
-          fontSize="34" 
+          fontSize="28" 
           fontWeight="800" 
           fill="#111827"
           letterSpacing="-0.03em"
