@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/Logo';
+import { Briefcase, UserCircle, KeyRound, Mail, Sparkles, Building2 } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -55,78 +56,131 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/20">
-      <div className="bg-background p-8 rounded-lg shadow-md w-full max-w-md border">
-        <div className="flex flex-col items-center justify-center mb-6">
-          <Logo width={160} height={45} className="mb-4" />
-          <h1 className="text-xl font-semibold text-gray-700">
-            {isRegister ? 'Crie sua conta' : 'Acesse sua conta'}
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F7FA] p-4 font-sans selection:bg-primary/10">
+      <div className="w-full max-w-[440px] bg-white border border-gray-100/90 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-8">
+        
+        {/* Logo and Header */}
+        <div className="flex flex-col items-center justify-center mb-8">
+          <Logo width={120} height={35} className="mb-6" />
+          <h1 className="text-xl font-bold tracking-tight text-gray-900">
+            {isRegister ? 'Crie sua conta no TalenToss' : 'Acesse sua conta'}
           </h1>
+          <p className="text-xs text-gray-500 font-medium mt-1.5">
+            {isRegister ? 'Comece a triar candidatos com IA hoje' : 'Bem-vindo de volta ao recrutamento inteligente'}
+          </p>
         </div>
         
         {errorMsg && (
-          <div className="mb-4 p-3 rounded-md bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium text-center">
+          <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-xs font-semibold text-center animate-in fade-in">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="email">E-mail</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading} />
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-xs font-bold text-gray-700">E-mail</Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="Ex: seuemail@empresa.com"
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+                disabled={isLoading} 
+                className="pl-9 h-10 premium-input w-full"
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="password">Senha</Label>
-            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={isLoading} />
+
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-xs font-bold text-gray-700">Senha</Label>
+            <div className="relative">
+              <KeyRound className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Input 
+                id="password" 
+                type="password" 
+                placeholder="Sua senha secreta"
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+                disabled={isLoading} 
+                className="pl-9 h-10 premium-input w-full"
+              />
+            </div>
           </div>
+
           {isRegister && (
-            <div>
-              <Label>Tipo de Conta</Label>
-              <select 
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background mb-4"
-                value={role} 
-                onChange={(e) => setRole(e.target.value)}
-                disabled={isLoading}
-              >
-                <option value="CANDIDATE">Candidato</option>
-                <option value="COMPANY">Empresa</option>
-              </select>
+            <div className="space-y-4 pt-2 border-t border-gray-100/80 animate-in fade-in duration-200">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-gray-700">Tipo de Conta</Label>
+                <div className="grid grid-cols-2 gap-2 bg-gray-100/60 p-0.5 rounded-lg border">
+                  <button 
+                    type="button"
+                    onClick={() => setRole('CANDIDATE')}
+                    className={`flex items-center justify-center gap-2 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
+                      role === 'CANDIDATE' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    <UserCircle className="w-3.5 h-3.5" /> Candidato
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setRole('COMPANY')}
+                    className={`flex items-center justify-center gap-2 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
+                      role === 'COMPANY' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    <Building2 className="w-3.5 h-3.5" /> Empresa
+                  </button>
+                </div>
+              </div>
               
               {role === 'CANDIDATE' ? (
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="firstName">Nome</Label>
-                    <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required disabled={isLoading} />
-                  </div>
-                  <div>
-                    <Label htmlFor="lastName">Sobrenome</Label>
-                    <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required disabled={isLoading} />
+                <div className="space-y-3 animate-in fade-in duration-150">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="firstName" className="text-xs font-bold text-gray-700">Nome</Label>
+                      <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required disabled={isLoading} className="h-10 premium-input" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="lastName" className="text-xs font-bold text-gray-700">Sobrenome</Label>
+                      <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required disabled={isLoading} className="h-10 premium-input" />
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="cnpj">CNPJ</Label>
-                    <Input id="cnpj" placeholder="XX.XXX.XXX/0001-XX" value={cnpj} onChange={(e) => setCnpj(e.target.value)} required disabled={isLoading} />
+                <div className="space-y-3 animate-in fade-in duration-150">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="cnpj" className="text-xs font-bold text-gray-700">CNPJ</Label>
+                    <Input id="cnpj" placeholder="XX.XXX.XXX/0001-XX" value={cnpj} onChange={(e) => setCnpj(e.target.value)} required disabled={isLoading} className="h-10 premium-input w-full" />
                   </div>
-                  <div>
-                    <Label htmlFor="corporateName">Razão Social</Label>
-                    <Input id="corporateName" placeholder="Sua Empresa LTDA" value={corporateName} onChange={(e) => setCorporateName(e.target.value)} required disabled={isLoading} />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="corporateName" className="text-xs font-bold text-gray-700">Razão Social</Label>
+                    <Input id="corporateName" placeholder="Sua Empresa LTDA" value={corporateName} onChange={(e) => setCorporateName(e.target.value)} required disabled={isLoading} className="h-10 premium-input w-full" />
                   </div>
-                  <div>
-                    <Label htmlFor="tradeName">Nome Fantasia</Label>
-                    <Input id="tradeName" placeholder="Sua Empresa" value={tradeName} onChange={(e) => setTradeName(e.target.value)} required disabled={isLoading} />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="tradeName" className="text-xs font-bold text-gray-700">Nome Fantasia (Imutável depois)</Label>
+                    <Input id="tradeName" placeholder="Nome comercial" value={tradeName} onChange={(e) => setTradeName(e.target.value)} required disabled={isLoading} className="h-10 premium-input w-full" />
                   </div>
                 </div>
               )}
             </div>
           )}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+
+          <Button type="submit" className="w-full bg-[#111827] text-white hover:bg-[#111827]/90 h-10 font-semibold shadow-sm border-0 mt-2" disabled={isLoading}>
             {isLoading ? 'Processando...' : (isRegister ? 'Criar Conta' : 'Entrar')}
           </Button>
-          <div className="text-center mt-4">
-            <button type="button" onClick={() => setIsRegister(!isRegister)} className="text-sm text-primary underline" disabled={isLoading}>
-              {isRegister ? 'Já tenho uma conta (Login)' : 'Criar nova conta'}
+
+          <div className="text-center mt-6 pt-4 border-t border-gray-100/80">
+            <button 
+              type="button" 
+              onClick={() => setIsRegister(!isRegister)} 
+              className="text-xs font-semibold text-primary hover:underline" 
+              disabled={isLoading}
+            >
+              {isRegister ? 'Já tenho uma conta (Login)' : 'Criar nova conta grátis'}
             </button>
           </div>
         </form>

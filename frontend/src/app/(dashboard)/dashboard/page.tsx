@@ -5,125 +5,133 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import { Briefcase, Users, Star, Clock, Bell, Plus, MoreHorizontal, Bot, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Users, Star, Clock, Plus, ArrowUpRight, CheckCircle2, ChevronRight, Activity, Bot } from 'lucide-react';
 
 export default function DashboardOverview() {
-  const [stats, setStats] = useState({ jobs: 24, candidates: 312, matches: 87, interviews: 16 });
+  const [company, setCompany] = useState<any>(null);
+  const [stats, setStats] = useState({ jobs: 0, candidates: 0, matches: 0, interviews: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      const [compRes, jobsRes, candRes] = await Promise.all([
+        api.get('/companies/my-company'),
+        api.get('/jobs/my-jobs').catch(() => ({ data: [] })),
+        api.get('/candidates').catch(() => ({ data: [] }))
+      ]);
+      
+      setCompany(compRes.data);
+      const jobsCount = jobsRes.data.length || 0;
+      const candidatesCount = candRes.data.length || 0;
+      
+      setStats({
+        jobs: jobsCount,
+        candidates: candidatesCount,
+        matches: Math.round(candidatesCount * 1.5),
+        interviews: Math.round(jobsCount * 0.8)
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto animate-in fade-in duration-500">
+      
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">Olá, Juliana! <span className="text-2xl">👋</span></h2>
-          <p className="text-gray-500 mt-1 font-medium">Aqui está o resumo do seu recrutamento hoje.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+            Olá, {company ? company.name : 'Recrutador'}! <span className="text-xl">👋</span>
+          </h2>
+          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-1">
+            Aqui está o resumo do seu pipeline seletivo hoje
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/dashboard/jobs?new=true">
-            <Button className="bg-primary text-white rounded-full px-6 font-medium shadow-sm hover:bg-primary/90">
-              <Plus className="w-4 h-4 mr-2" /> Nova Vaga
+            <Button className="bg-[#111827] text-white hover:bg-[#111827]/90 rounded-full px-5 py-2 font-semibold text-xs tracking-wider uppercase shadow-sm border-0">
+              <Plus className="w-3.5 h-3.5 mr-1.5" /> Nova Vaga
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* 4 Top Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="rounded-2xl border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
-                <Briefcase className="w-6 h-6" />
+      {/* Top 4 Stats Cards */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: 'Vagas Ativas', value: stats.jobs, icon: Briefcase, color: 'text-blue-500 bg-blue-50/50 border-blue-100/50' },
+          { label: 'Candidatos Triados', value: stats.candidates, icon: Users, color: 'text-emerald-500 bg-emerald-50/50 border-emerald-100/50' },
+          { label: 'Matches Gerados', value: stats.matches, icon: Star, color: 'text-purple-500 bg-purple-50/50 border-purple-100/50' },
+          { label: 'Entrevistas', value: stats.interviews, icon: Clock, color: 'text-amber-500 bg-amber-50/50 border-amber-100/50' },
+        ].map((item, idx) => (
+          <Card key={idx} className="premium-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{item.label}</span>
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${item.color}`}>
+                  <item.icon className="w-4 h-4" />
+                </div>
               </div>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-500 mb-1">Vagas Ativas</p>
-              <h3 className="text-3xl font-bold text-gray-900">{stats.jobs}</h3>
-              <p className="text-xs font-medium text-gray-500 mt-2">+3 esta semana</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
-                <Users className="w-6 h-6" />
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                  {loading ? '...' : item.value}
+                </span>
+                <span className="text-[10px] font-bold text-green-600 flex items-center gap-0.5">
+                  +12% <ArrowUpRight className="w-3 h-3" />
+                </span>
               </div>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-500 mb-1">Candidatos</p>
-              <h3 className="text-3xl font-bold text-gray-900">{stats.candidates}</h3>
-              <p className="text-xs font-medium text-gray-500 mt-2">+18 esta semana</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center">
-                <Star className="w-6 h-6" />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-500 mb-1">Matches</p>
-              <h3 className="text-3xl font-bold text-gray-900">{stats.matches}</h3>
-              <p className="text-xs font-medium text-gray-500 mt-2">+12 esta semana</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
-                <Clock className="w-6 h-6" />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-500 mb-1">Entrevistas</p>
-              <h3 className="text-3xl font-bold text-gray-900">{stats.interviews}</h3>
-              <p className="text-xs font-medium text-gray-500 mt-2">+4 esta semana</p>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* Main Content Area */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* Graphs and FUNNEL */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        
         {/* Matches em Destaque */}
-        <Card className="rounded-2xl border-0 shadow-sm flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold">Matches em Destaque</CardTitle>
+        <Card className="premium-card lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-gray-100/80">
+            <div>
+              <CardTitle className="text-sm font-bold uppercase tracking-wider text-gray-800">Matches Otimizados por IA</CardTitle>
+              <CardDescription className="text-xs text-gray-400 font-medium">Recomendações com maior similaridade semântica esta semana</CardDescription>
+            </div>
             <Link href="/dashboard/matches">
-              <Button variant="link" className="text-primary font-medium text-sm">Ver todos</Button>
+              <Button variant="ghost" className="text-xs font-semibold text-primary flex items-center gap-1">
+                Ver todos <ChevronRight className="w-4 h-4" />
+              </Button>
             </Link>
           </CardHeader>
-          <CardContent className="flex-1">
-            <div className="space-y-6 mt-4">
+          <CardContent className="pt-6">
+            <div className="space-y-5">
               {[
-                { name: 'Mariana Souza', role: 'Product Designer', loc: 'São Paulo, SP', match: 95, img: 1 },
-                { name: 'Rafael Lima', role: 'Desenvolvedor Full Stack Sênior', loc: 'Remoto', match: 92, img: 2 },
-                { name: 'Camila Rocha', role: 'Analista de Dados Pleno', loc: 'Rio de Janeiro, RJ', match: 90, img: 3 },
-                { name: 'Lucas Ferreira', role: 'DevOps Engineer Sênior', loc: 'Remoto', match: 88, img: 4 },
-              ].map((m, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <img src={`https://i.pravatar.cc/150?img=${m.img + 10}`} alt={m.name} className="w-12 h-12 rounded-full object-cover" />
+                { name: 'Mariana Souza', role: 'Product Designer Sênior', fit: '95%', tag: 'Alta Afinidade', status: 'Triado por IA', border: 'border-green-150 bg-green-50/20' },
+                { name: 'Rafael Lima', role: 'Dev Full Stack Sênior', fit: '92%', tag: 'Excelente Fit', status: 'Aprovado Tecnico', border: 'border-green-150 bg-green-50/20' },
+                { name: 'Camila Rocha', role: 'Analista de Dados Pleno', fit: '90%', tag: 'Excelente Fit', status: 'Triado por IA', border: 'border-blue-150 bg-blue-50/20' }
+              ].map((m, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-gray-200/80 hover:bg-gray-50/30 transition-all duration-300">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0">
+                      {m.name[0]}
+                    </div>
                     <div>
-                      <h4 className="text-sm font-bold text-gray-900">{m.name}</h4>
-                      <p className="text-xs font-medium text-gray-500">{m.role}</p>
+                      <h4 className="text-xs font-bold text-gray-900">{m.name}</h4>
+                      <p className="text-[10px] font-medium text-gray-400 mt-0.5">{m.role}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xs font-semibold text-success mb-1">Compatibilidade</p>
-                    <div className="flex items-center justify-end gap-2">
-                      <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-success rounded-full" style={{ width: `${m.match}%` }}></div>
-                      </div>
-                      <span className="text-sm font-bold text-gray-900">{m.match}%</span>
-                    </div>
+                  <div className="flex items-center gap-4">
+                    <span className="premium-badge bg-green-50 text-green-700 border border-green-100 text-[10px] font-bold">
+                      {m.fit} Match
+                    </span>
+                    <span className="text-[10px] font-semibold text-gray-500 hidden sm:inline-block">
+                      {m.status}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -132,38 +140,47 @@ export default function DashboardOverview() {
         </Card>
 
         {/* Funil de Recrutamento */}
-        <Card className="rounded-2xl border-0 shadow-sm flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold">Funil de Recrutamento</CardTitle>
-            <span className="text-sm font-medium text-gray-500">Este mês</span>
+        <Card className="premium-card">
+          <CardHeader className="pb-2 border-b border-gray-100/80">
+            <CardTitle className="text-sm font-bold uppercase tracking-wider text-gray-800">Pipeline de Conversão</CardTitle>
+            <CardDescription className="text-xs text-gray-400 font-medium">Fluxo de triagem semântica atual</CardDescription>
           </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center py-8">
-            <div className="space-y-3 px-4">
+          <CardContent className="pt-8 pb-8 flex flex-col justify-between h-full min-h-[300px]">
+            
+            {/* SVG Visual Bar Funnel */}
+            <div className="space-y-4">
               {[
-                { label: 'Candidatos', count: 312, color: 'bg-blue-600', w: '100%' },
-                { label: 'Triagem IA', count: 156, color: 'bg-blue-400', w: '85%' },
-                { label: 'Entrevista', count: 47, color: 'bg-blue-300', w: '70%' },
-                { label: 'Proposta', count: 16, color: 'bg-emerald-300', w: '55%' },
-                { label: 'Contratados', count: 6, color: 'bg-emerald-500', w: '40%' },
-              ].map((step, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <div 
-                      className={`h-10 ${step.color} rounded-sm flex items-center justify-center transition-all`}
-                      style={{ width: step.w }}
-                    >
-                      <span className="text-white text-xs font-semibold">{step.label}</span>
-                    </div>
+                { label: 'Candidatos', count: stats.candidates, percent: 100, color: 'bg-blue-500' },
+                { label: 'Triagem IA', count: Math.round(stats.candidates * 0.5), percent: 50, color: 'bg-blue-400' },
+                { label: 'Entrevistas', count: stats.interviews, percent: 25, color: 'bg-amber-400' },
+                { label: 'Contratados', count: Math.round(stats.interviews * 0.3), percent: 8, color: 'bg-green-500' }
+              ].map((step, idx) => (
+                <div key={idx} className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs font-bold text-gray-700">
+                    <span>{step.label}</span>
+                    <span className="text-gray-400 font-semibold">{step.count} ({step.percent}%)</span>
                   </div>
-                  <div className="w-24 text-right">
-                    <p className="text-xs font-medium text-gray-500">{step.label}</p>
-                    <p className="text-lg font-bold text-gray-900 leading-tight">{step.count}</p>
+                  <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${step.color}`} style={{ width: `${step.percent}%` }}></div>
                   </div>
                 </div>
               ))}
             </div>
+
+            {/* AI Insights block */}
+            <div className="mt-6 p-3 rounded-xl bg-blue-50/50 border border-blue-100/50 flex items-start gap-2">
+              <Bot className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold text-primary uppercase tracking-wide">INSIGHT DA IA</span>
+                <p className="text-[10px] text-gray-500 font-medium leading-relaxed">
+                  Taxa de conversão de triagem aumentou 14% com a nova estrutura de competências recomendadas.
+                </p>
+              </div>
+            </div>
+
           </CardContent>
         </Card>
+
       </div>
 
     </div>
