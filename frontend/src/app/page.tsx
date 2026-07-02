@@ -12,37 +12,37 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#F5F7FA] text-[#111827] flex flex-col font-sans selection:bg-primary/10">
       {/* Navbar header */}
-      <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/70 backdrop-blur-md">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+      <header className="sticky top-0 z-50 w-full border-b border-gray-100/80 bg-white/80 backdrop-blur-md">
+        <div className="container mx-auto px-6 h-24 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Logo width={140} height={40} />
+            <Logo width={165} height={48} />
           </div>
 
-          <div className="hidden md:flex bg-gray-100/80 p-0.5 rounded-full border border-gray-200/50">
+          <div className="hidden md:flex bg-gray-100/90 p-1 rounded-full border border-gray-200/50">
             <button 
               onClick={() => setActiveTab('empresa')}
-              className={`flex items-center gap-2 px-5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all ${
-                activeTab === 'empresa' ? 'bg-primary text-white shadow-sm' : 'text-gray-500 hover:text-gray-900'
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all duration-200 ${
+                activeTab === 'empresa' ? 'bg-[#111827] text-white shadow-sm' : 'text-gray-500 hover:text-gray-900'
               }`}
             >
-              <Building2 className="w-3.5 h-3.5" /> Sou Empresa
+              <Building2 className="w-4 h-4" /> Sou Empresa
             </button>
             <button 
               onClick={() => setActiveTab('candidato')}
-              className={`flex items-center gap-2 px-5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all ${
-                activeTab === 'candidato' ? 'bg-primary text-white shadow-sm' : 'text-gray-500 hover:text-gray-900'
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all duration-200 ${
+                activeTab === 'candidato' ? 'bg-[#111827] text-white shadow-sm' : 'text-gray-500 hover:text-gray-900'
               }`}
             >
-              <UserCircle className="w-3.5 h-3.5" /> Sou Candidato
+              <UserCircle className="w-4 h-4" /> Sou Candidato
             </button>
           </div>
 
           <nav className="flex items-center gap-6">
-            <Link href="/login" className="text-sm font-semibold text-gray-500 hover:text-[#111827] transition-colors">
+            <Link href="/login" className="text-sm font-bold text-gray-500 hover:text-[#111827] transition-colors">
               Entrar
             </Link>
             <Link href="/login">
-              <Button size="sm" className="rounded-full bg-[#111827] text-white hover:bg-[#111827]/90 font-semibold px-5 shadow-sm border-0">
+              <Button size="default" className="rounded-full bg-[#111827] text-white hover:bg-[#111827]/90 font-bold px-6 h-11 shadow-sm border-0">
                 Criar Conta
               </Button>
             </Link>
