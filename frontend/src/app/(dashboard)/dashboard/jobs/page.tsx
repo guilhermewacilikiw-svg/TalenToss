@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -11,7 +11,7 @@ import { api } from '@/lib/api';
 import { Loader2, Briefcase, Plus, Calendar, AlertCircle, Bot, Sparkles } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
-export default function JobsPage() {
+function JobsContent() {
   const searchParams = useSearchParams();
   const [jobs, setJobs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -215,5 +215,13 @@ export default function JobsPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function JobsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-xs font-bold text-gray-400 animate-pulse">Carregando vagas...</div>}>
+      <JobsContent />
+    </Suspense>
   );
 }
