@@ -29,11 +29,11 @@ export class GoogleController {
         await this.googleService.handleCallback(code, companyId);
       }
       // Redirect back to frontend
-      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
       return res.redirect(`${frontendUrl}/dashboard/interviews?connected=true`);
     } catch (err) {
       console.error('Google Callback Error:', err);
-      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
       return res.redirect(`${frontendUrl}/dashboard/interviews?error=google_auth_failed`);
     }
   }
