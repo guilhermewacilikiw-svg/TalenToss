@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UploadCloud, CheckCircle2, Bot, Briefcase, FileText, Clock, Star, Sparkles, Edit2, MapPin, Phone, Link as LinkIcon, DollarSign, Laptop, Globe, GraduationCap, Save, Loader2 } from 'lucide-react';
+import { UploadCloud, CheckCircle2, Bot, Briefcase, FileText, Clock, Star, Sparkles, Edit2, MapPin, Phone, Link as LinkIcon, DollarSign, Laptop, Globe, GraduationCap, Save, Loader2, AlertCircle } from 'lucide-react';
 import { api } from '@/lib/api';
 import Link from 'next/link';
 
@@ -22,6 +22,7 @@ export default function CandidateDashboard() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [applyStatus, setApplyStatus] = useState<'idle' | 'applying' | 'success' | 'error'>('idle');
   
   // Dashboard stats
   const stats = { jobs: 0, applications: 0, interviews: 0 };
@@ -29,6 +30,27 @@ export default function CandidateDashboard() {
   useEffect(() => {
     loadProfile();
   }, []);
+
+  useEffect(() => {
+    const checkAutoApply = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const applyJobId = params.get('applyJobId');
+      
+      if (applyJobId && isDone) {
+        setApplyStatus('applying');
+        try {
+          await api.post(`/candidates/apply/${applyJobId}`);
+          setApplyStatus('success');
+          // Clear query params to prevent applying again on refresh
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (err) {
+          console.error(err);
+          setApplyStatus('error');
+        }
+      }
+    };
+    checkAutoApply();
+  }, [isDone]);
 
   const loadProfile = async () => {
     try {
@@ -97,6 +119,26 @@ export default function CandidateDashboard() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-8 animate-in fade-in duration-500 selection:bg-primary/10">
+      
+      {/* Auto-apply notification banners */}
+      {applyStatus === 'applying' && (
+        <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-800 text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top duration-200">
+          <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+          IA processando sua candidatura para a vaga...
+        </div>
+      )}
+      {applyStatus === 'success' && (
+        <div className="p-4 bg-green-50 border border-green-100 rounded-xl text-green-800 text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top duration-200">
+          <CheckCircle2 className="w-4 h-4 text-green-600 animate-bounce" />
+          Candidatura registrada com sucesso! A Inteligência Artificial já está avaliando seu perfil.
+        </div>
+      )}
+      {applyStatus === 'error' && (
+        <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-800 text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top duration-200">
+          <AlertCircle className="w-4 h-4 text-red-600" />
+          Erro ao registrar candidatura. Certifique-se de preencher seus dados de contato e fazer upload do currículo PDF primeiro!
+        </div>
+      )}
       
       {/* Top Welcome Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">

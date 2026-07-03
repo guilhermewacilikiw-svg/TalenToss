@@ -42,7 +42,12 @@ export default function LoginPage() {
       
       const loggedInRole = res.data.role;
       
-      if (loggedInRole === 'COMPANY' || loggedInRole === 'ADMIN') {
+      const searchParamsObj = new URLSearchParams(window.location.search);
+      const redirectPath = searchParamsObj.get('redirect');
+
+      if (redirectPath) {
+        router.push(redirectPath);
+      } else if (loggedInRole === 'COMPANY' || loggedInRole === 'ADMIN') {
         router.push('/dashboard');
       } else {
         router.push('/candidate/dashboard');
