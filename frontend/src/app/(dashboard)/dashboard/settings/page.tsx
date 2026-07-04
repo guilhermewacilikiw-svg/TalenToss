@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
 
 export default function CompanySettings() {
   const [loading, setLoading] = useState(true);
@@ -59,28 +60,37 @@ export default function CompanySettings() {
   if (loading) return <div className="p-8 text-center animate-pulse">Carregando perfil...</div>;
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">Configurações</h2>
-        <p className="text-muted-foreground">Gerencie as informações públicas da sua empresa.</p>
+    <div className="space-y-6 max-w-3xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900">Canal da Empresa</h2>
+          <p className="text-muted-foreground mt-1">Gerencie as informações públicas da sua empresa para os candidatos.</p>
+        </div>
+        <Button variant="outline" asChild className="shrink-0 w-full md:w-auto">
+          <Link href="/vagas" target="_blank">
+            <ExternalLink className="w-4 h-4 mr-2" />
+            Visualizar Portal Público
+          </Link>
+        </Button>
       </div>
 
-      <Card>
+      <Card className="border-gray-200/60 shadow-sm">
         <CardHeader>
-          <CardTitle>Perfil da Empresa</CardTitle>
+          <CardTitle>Perfil Público</CardTitle>
           <CardDescription>
-            Essas informações serão visíveis para os candidatos nas vagas publicadas.
+            Essas informações representam a sua marca empregadora.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <CardContent className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
                 <Label htmlFor="name">Razão Social</Label>
                 <Input 
                   id="name" 
                   value={formData.name}
                   disabled
+                  className="bg-gray-50 text-gray-500"
                   title="A Razão Social não pode ser alterada após o cadastro."
                 />
               </div>
@@ -90,33 +100,44 @@ export default function CompanySettings() {
                   id="tradeName" 
                   value={formData.tradeName}
                   disabled
+                  className="bg-gray-50 text-gray-500"
                   title="O Nome Fantasia não pode ser alterado após o cadastro."
                 />
               </div>
             </div>
+            
             <div className="space-y-2">
               <Label htmlFor="description">Sobre a Empresa (Descrição)</Label>
               <textarea 
                 id="description" 
                 value={formData.description}
                 onChange={e => setFormData({...formData, description: e.target.value})}
-                className="flex min-h-[100px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Nossa missão é..."
+                className="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Conte sobre a missão, visão e cultura da sua empresa..."
               />
             </div>
+            
             <div className="space-y-2">
               <Label htmlFor="logoUrl">URL da Logo (Opcional)</Label>
-              <Input 
-                id="logoUrl" 
-                type="url"
-                value={formData.logoUrl}
-                onChange={e => setFormData({...formData, logoUrl: e.target.value})}
-                placeholder="https://..."
-              />
+              <div className="flex flex-col md:flex-row gap-3">
+                <Input 
+                  id="logoUrl" 
+                  type="url"
+                  value={formData.logoUrl}
+                  onChange={e => setFormData({...formData, logoUrl: e.target.value})}
+                  placeholder="https://sua-empresa.com/logo.png"
+                  className="flex-1"
+                />
+                {formData.logoUrl && (
+                  <div className="w-10 h-10 border rounded-md overflow-hidden shrink-0 hidden md:flex items-center justify-center bg-gray-50">
+                    <img src={formData.logoUrl} alt="Logo preview" className="max-w-full max-h-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+                  </div>
+                )}
+              </div>
             </div>
           </CardContent>
-          <CardFooter className="border-t pt-6">
-            <Button type="submit" disabled={saving}>
+          <CardFooter className="border-t pt-6 bg-gray-50/50 rounded-b-xl">
+            <Button type="submit" disabled={saving} className="w-full md:w-auto">
               {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Salvar Alterações'}
             </Button>
           </CardFooter>
