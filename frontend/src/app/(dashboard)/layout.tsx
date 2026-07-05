@@ -89,7 +89,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 bg-[#F5F7FA]">
+      <main className="flex-1 flex flex-col w-full max-w-[100vw] md:max-w-none overflow-x-hidden bg-[#F5F7FA]">
         
         {/* Header Responsivo */}
         <header className="h-16 flex items-center justify-between px-4 md:px-8 bg-white md:bg-transparent border-b md:border-none border-gray-100 shrink-0">
@@ -124,7 +124,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-auto p-4 md:p-8 pt-4 md:pt-2">
+        <div className="flex-1 w-full max-w-full p-4 md:p-8 pt-4 md:pt-2">
           {children}
         </div>
       </main>
