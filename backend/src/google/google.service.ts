@@ -16,13 +16,6 @@ export class GoogleService {
   }
 
   getAuthUrl(companyId: string) {
-    const clientId = process.env.GOOGLE_CLIENT_ID || '';
-    if (clientId.includes('dummy') || !clientId) {
-      // Mock OAuth Flow by redirecting straight to our callback with a mock code
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
-      return `${backendUrl}/google/callback?code=mock_code&state=${companyId}`;
-    }
-
     return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: ['https://www.googleapis.com/auth/calendar.events'],
@@ -32,19 +25,6 @@ export class GoogleService {
   }
 
   async handleCallback(code: string, companyId: string) {
-    const clientId = process.env.GOOGLE_CLIENT_ID || '';
-    if (clientId.includes('dummy') || !clientId) {
-      // Mock behavior when no real keys are provided
-      await this.prisma.company.update({
-        where: { id: companyId },
-        data: {
-          googleAccessToken: 'mock_access_token',
-          googleRefreshToken: 'mock_refresh_token',
-        }
-      });
-      return;
-    }
-
     const { tokens } = await this.oauth2Client.getToken(code);
     await this.prisma.company.update({
       where: { id: companyId },
@@ -77,13 +57,6 @@ export class GoogleService {
     
     if (!company?.googleAccessToken) {
       throw new Error('Google Calendar não conectado');
-    }
-
-    if (company.googleAccessToken === 'mock_access_token') {
-      return {
-        id: 'mock_event_id_' + Date.now(),
-        hangoutLink: 'https://meet.google.com/mock-link-' + Date.now()
-      };
     }
 
     this.oauth2Client.setCredentials({
