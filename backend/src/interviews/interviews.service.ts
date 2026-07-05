@@ -55,7 +55,7 @@ export class InterviewsService {
       console.warn('Could not create Google Event:', err.message);
     }
 
-    // Atualiza ou cria a application com status INTERVIEWING
+    // Atualiza ou cria a application com status INTERVIEW
     await this.prisma.application.upsert({
       where: {
         jobId_candidateId: {
@@ -64,12 +64,12 @@ export class InterviewsService {
         }
       },
       update: {
-        status: 'INTERVIEWING'
+        status: 'INTERVIEW'
       },
       create: {
         jobId: data.jobId,
         candidateId: data.candidateId,
-        status: 'INTERVIEWING'
+        status: 'INTERVIEW'
       }
     });
 

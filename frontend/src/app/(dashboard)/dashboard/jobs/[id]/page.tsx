@@ -113,7 +113,7 @@ export default function JobMatchingPage({ params }: { params: { id: string } }) 
                       </span>
                     </TableCell>
                     <TableCell className="text-center">
-                      {c.application_status === 'INTERVIEWING' ? (
+                      {c.application_status === 'INTERVIEW' ? (
                         <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-blue-200">
                           Em Entrevista
                         </span>
@@ -128,7 +128,7 @@ export default function JobMatchingPage({ params }: { params: { id: string } }) 
                       )}
                     </TableCell>
                     <TableCell className="text-right whitespace-nowrap">
-                      {c.application_status === 'INTERVIEWING' ? (
+                      {c.application_status === 'INTERVIEW' ? (
                         <Button variant="secondary" size="sm" disabled>Agendado</Button>
                       ) : (
                         <Button onClick={() => setSelectedCandidate(c)} variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
