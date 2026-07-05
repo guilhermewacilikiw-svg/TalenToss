@@ -92,9 +92,11 @@ export class JobsService {
         c."lastName", 
         c.headline,
         c."employabilityScore",
-        (1 - (c."profileVector" <=> j."jobVector")) * 100 AS match_score
+        (1 - (c."profileVector" <=> j."jobVector")) * 100 AS match_score,
+        a.status as application_status
       FROM "Candidate" c
       JOIN "Job" j ON j.id = $1
+      LEFT JOIN "Application" a ON a."candidateId" = c.id AND a."jobId" = $1
       WHERE c."profileVector" IS NOT NULL AND j."jobVector" IS NOT NULL
       ORDER BY match_score DESC
       LIMIT 20;

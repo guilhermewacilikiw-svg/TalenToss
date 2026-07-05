@@ -32,18 +32,20 @@ function JobsContent() {
     <div className="space-y-6 animate-in fade-in duration-500 max-w-7xl mx-auto">
       
       {/* Page Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">Vagas Publicadas</h2>
           <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-1">
             Gerencie o pipeline de vagas da sua organização
           </p>
         </div>
-        <Link href="/dashboard/jobs/new">
-          <Button className="bg-[#111827] text-white hover:bg-[#111827]/90 rounded-full px-5 py-2 font-semibold text-xs tracking-wider uppercase shadow-sm border-0 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-            <Plus className="w-3.5 h-3.5 mr-1.5" /> Criar Nova Vaga
-          </Button>
-        </Link>
+        <div className="flex w-full sm:w-auto mt-2 sm:mt-0">
+          <Link href="/dashboard/jobs/new" className="w-full sm:w-auto">
+            <Button className="w-full bg-[#111827] text-white hover:bg-[#111827]/90 rounded-full px-5 py-3 sm:py-2 font-semibold text-xs tracking-wider uppercase shadow-sm border-0 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+              <Plus className="w-4 h-4 mr-1.5" /> Criar Nova Vaga
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Table Container */}

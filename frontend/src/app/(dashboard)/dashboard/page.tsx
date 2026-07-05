@@ -54,10 +54,10 @@ export default function DashboardOverview() {
             Aqui está o resumo do seu pipeline seletivo hoje
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Link href="/dashboard/jobs?new=true">
-            <Button className="bg-[#111827] text-white hover:bg-[#111827]/90 rounded-full px-5 py-2 font-semibold text-xs tracking-wider uppercase shadow-sm border-0">
-              <Plus className="w-3.5 h-3.5 mr-1.5" /> Nova Vaga
+        <div className="flex w-full sm:w-auto mt-2 sm:mt-0">
+          <Link href="/dashboard/jobs?new=true" className="w-full sm:w-auto">
+            <Button className="w-full bg-[#111827] text-white hover:bg-[#111827]/90 rounded-full px-5 py-3 sm:py-2 font-semibold text-xs tracking-wider uppercase shadow-sm border-0">
+              <Plus className="w-4 h-4 mr-1.5" /> Nova Vaga
             </Button>
           </Link>
         </div>
