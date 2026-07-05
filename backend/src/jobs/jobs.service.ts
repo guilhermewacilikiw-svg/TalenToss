@@ -84,28 +84,64 @@ export class JobsService {
     if (!job) throw new NotFoundException('Job not found');
     if (job.companyId !== companyId) throw new ForbiddenException('Not your job');
 
-    // Usa raw query para calcular a similaridade de cosseno (1 - cosine_distance)
-    const matches: any[] = await this.prisma.$queryRawUnsafe(`
-      SELECT 
-        c.id, 
-        c."firstName", 
-        c."lastName", 
-        c.headline,
-        c."employabilityScore",
-        (1 - (c."profileVector" <=> j."jobVector")) * 100 AS match_score,
-        a.status as application_status
-      FROM "Candidate" c
-      JOIN "Job" j ON j.id = $1
-      LEFT JOIN "Application" a ON a."candidateId" = c.id AND a."jobId" = $1
-      WHERE c."profileVector" IS NOT NULL AND j."jobVector" IS NOT NULL
-      ORDER BY match_score DESC
-      LIMIT 20;
-    `, jobId);
+    // 1. Pega todos que já se candidataram (via plataforma)
+    const applications = await this.prisma.application.findMany({
+      where: { jobId },
+      include: { candidate: true }
+    });
 
-    return matches.map(m => ({
-      ...m,
-      match_score: Math.round(m.match_score)
-    }));
+    // 2. Pega recomendados pela Inteligência Artificial
+    let aiMatches: any[] = [];
+    try {
+      aiMatches = await this.prisma.$queryRawUnsafe(`
+        SELECT 
+          c.id, 
+          c."firstName", 
+          c."lastName", 
+          c.headline,
+          c."employabilityScore",
+          (1 - (c."profileVector" <=> j."jobVector")) * 100 AS match_score
+        FROM "Candidate" c
+        JOIN "Job" j ON j.id = $1
+        WHERE c."profileVector" IS NOT NULL AND j."jobVector" IS NOT NULL
+        ORDER BY match_score DESC
+        LIMIT 20;
+      `, jobId);
+    } catch (e) {
+      console.error("Erro na busca vetorial:", e);
+    }
+
+    const resultsMap = new Map();
+
+    // Adiciona recomendados primeiro
+    for (const m of aiMatches) {
+      resultsMap.set(m.id, {
+        ...m,
+        match_score: Math.round(m.match_score || 0),
+        application_status: 'APPLIED' // Coluna 'Novos/Recomendados'
+      });
+    }
+
+    // Adiciona e sobrepõe quem realmente se candidatou
+    for (const app of applications) {
+      const existing = resultsMap.get(app.candidateId);
+      if (existing) {
+        existing.application_status = app.status;
+        if (app.matchScore) existing.match_score = Math.round(app.matchScore);
+      } else {
+        resultsMap.set(app.candidateId, {
+          id: app.candidate.id,
+          firstName: app.candidate.firstName,
+          lastName: app.candidate.lastName,
+          headline: app.candidate.headline,
+          employabilityScore: app.candidate.employabilityScore,
+          match_score: Math.round(app.matchScore || 0),
+          application_status: app.status
+        });
+      }
+    }
+
+    return Array.from(resultsMap.values()).sort((a, b) => b.match_score - a.match_score);
   }
 
   async getApplications(jobId: string, companyId: string) {
