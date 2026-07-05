@@ -97,10 +97,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Mobile Menu Trigger & Logo */}
           <div className="flex lg:hidden items-center gap-2">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <button className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
-                  <Menu className="w-6 h-6" />
-                </button>
+              <SheetTrigger className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
+                <Menu className="w-6 h-6" />
               </SheetTrigger>
               <SheetContent side="left" className="w-[280px] p-0 border-r-0">
                 <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
