@@ -35,8 +35,8 @@ export class JobsService {
     }
 
     try {
-      const semanticText = `Title: ${data.title}\nDescription: ${data.description}\nRequirements: ${(data.requirements || []).join(', ')}`;
-      const embedding = await this.ai.generateEmbedding(semanticText);
+      const structuredProfile = await this.ai.structureJobProfile(data.title, data.description, data.requirements || []);
+      const embedding = await this.ai.generateEmbedding(structuredProfile);
       if (embedding && embedding.length === 768) {
         const vectorStr = `[${embedding.join(',')}]`;
         await this.prisma.$executeRawUnsafe(

@@ -104,10 +104,16 @@ export class CandidatesService {
     try {
       // Cria uma string combinada rica em semântica para o embedding
       const semanticText = `
-        Headline: ${parsedData.headline || ''}
-        Summary: ${parsedData.summary || ''}
-        Skills: ${(parsedData.skills || []).join(', ')}
-        Experiences: ${(parsedData.experiences || []).map((e: any) => `${e.title || e.position} at ${e.company}: ${e.description}`).join(' | ')}
+        Perfil Profissional Ideal:
+        Senioridade ou Foco: ${parsedData.headline || ''}
+        Resumo: ${parsedData.summary || ''}
+        Competências Técnicas e Proficiência: ${(parsedData.skills || []).join(', ')}
+        
+        Experiência Comprovada e Tempo de Atuação:
+        ${(parsedData.experiences || []).map((e: any) => {
+          const periodStr = e.period ? `(Tempo: ${e.period})` : '';
+          return `Cargo: ${e.title || e.position} em ${e.company} ${periodStr}. Responsabilidades e Conquistas: ${e.description}`;
+        }).join(' | ')}
       `;
       
       const embedding = await this.ai.generateEmbedding(semanticText);

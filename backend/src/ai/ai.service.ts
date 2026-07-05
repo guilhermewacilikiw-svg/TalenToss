@@ -90,9 +90,75 @@ export class AiService {
     }
   }
 
+  async structureJobProfile(title: string, description: string, requirements: string[]): Promise<string> {
+    const apiKey = this.configService.get<string>('GROQ_API_KEY');
+    if (!apiKey || apiKey === 'dummy-key') {
+      return `Job: ${title}. Requirements: ${requirements.join(', ')}.`;
+    }
+
+    const prompt = `
+      Você é um assistente de IA especialista em recrutamento.
+      Analise a vaga abaixo e crie um "Perfil Ideal Estruturado" detalhando os requisitos cruciais para essa vaga.
+      Eu quero que o texto resultante seja extremamente denso em palavras-chave relevantes, focando em:
+      - Nível de senioridade exigido.
+      - Tempo de experiência esperado.
+      - Core Skills (tecnologias, ferramentas, conhecimentos mandatórios).
+      
+      Não use markdown, retorne apenas um parágrafo denso e descritivo com as características ideais do candidato.
+      
+      Título: ${title}
+      Descrição: ${description}
+      Requisitos Listados: ${requirements.join(', ')}
+    `;
+
+    try {
+      const chatCompletion = await this.groq.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.1,
+      });
+
+      return chatCompletion.choices[0]?.message?.content?.trim() || title;
+    } catch (error) {
+      this.logger.error('Failed to structure job profile', error);
+      return `${title} ${requirements.join(' ')}`;
+    }
+  }
+
   async generateEmbedding(text: string): Promise<number[]> {
-    // Como a Groq foca em geração de texto e não embeddings nativos abertos, 
-    // manteremos um array de embeddings (vetores) simulado estático apenas para o DB não falhar.
-    return Array(768).fill(0.1);
+    // Para tornar o Match do PGVector "Criterioso" e real (já que a Groq não tem endpoint nativo de embeddings),
+    // vamos usar um algoritmo de Hashing Semântico (Pseudo-TF-IDF). 
+    // Palavras iguais em posições hash iguais aumentarão o "Match Score" (Similaridade de Cosseno).
+    
+    const vector = new Array(768).fill(0);
+    if (!text) return vector;
+
+    // Normaliza o texto e extrai "tokens"
+    const words = text.toLowerCase().replace(/[^\w\s]/gi, '').split(/\s+/).filter(w => w.length > 2);
+    
+    // Distribui o peso das palavras nas dimensões do vetor baseado no hash da palavra
+    for (const word of words) {
+      let hash = 0;
+      for (let i = 0; i < word.length; i++) {
+        hash = ((hash << 5) - hash) + word.charCodeAt(i);
+        hash |= 0; // Convert to 32bit integer
+      }
+      const index = Math.abs(hash) % 768;
+      // Adiciona peso à dimensão específica (TF)
+      vector[index] += 1;
+    }
+
+    // Normalização L2 (para que a similaridade de cosseno funcione perfeitamente)
+    let sumSquares = 0;
+    for (let i = 0; i < 768; i++) {
+      sumSquares += vector[i] * vector[i];
+    }
+    const magnitude = Math.sqrt(sumSquares) || 1;
+    
+    for (let i = 0; i < 768; i++) {
+      vector[i] = vector[i] / magnitude;
+    }
+
+    return vector;
   }
 }
