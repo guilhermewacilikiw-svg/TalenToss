@@ -83,19 +83,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen w-full bg-[#F5F7FA] text-foreground font-sans">
       
-      {/* Desktop Sidebar (hidden on mobile) */}
-      <aside className="hidden md:flex w-64 flex-col border-r border-gray-100 bg-white shrink-0 h-screen sticky top-0">
+      {/* Desktop Sidebar (hidden on mobile and tablet) */}
+      <aside className="hidden lg:flex w-64 flex-col border-r border-gray-100 bg-white shrink-0 h-screen sticky top-0">
         <SidebarContent />
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col w-full max-w-[100vw] md:max-w-none overflow-x-hidden bg-[#F5F7FA]">
+      <main className="flex-1 flex flex-col w-full max-w-[100vw] lg:max-w-none overflow-x-hidden bg-[#F5F7FA]">
         
         {/* Header Responsivo */}
-        <header className="h-16 flex items-center justify-between px-4 md:px-8 bg-white md:bg-transparent border-b md:border-none border-gray-100 shrink-0">
+        <header className="h-16 flex items-center justify-between px-4 lg:px-8 bg-white lg:bg-transparent border-b lg:border-none border-gray-100 shrink-0">
           
           {/* Mobile Menu Trigger & Logo */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-2">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <button className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
