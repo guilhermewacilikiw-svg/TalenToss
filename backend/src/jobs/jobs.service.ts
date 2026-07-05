@@ -126,7 +126,7 @@ export class JobsService {
     });
   }
 
-  async updateApplicationStatus(applicationId: string, companyId: string, status: 'SCREENING' | 'REJECTED') {
+  async updateApplicationStatus(applicationId: string, companyId: string, status: 'SCREENING' | 'REJECTED' | 'INTERVIEW' | 'HIRED') {
     const application = await this.prisma.application.findUnique({
       where: { id: applicationId },
       include: { job: true }
@@ -135,9 +135,96 @@ export class JobsService {
     if (!application) throw new NotFoundException('Application not found');
     if (application.job.companyId !== companyId) throw new ForbiddenException('Not your job');
 
-    return this.prisma.application.update({
+    const updatedApp = await this.prisma.application.update({
       where: { id: applicationId },
       data: { status }
+    });
+
+    if (status === 'HIRED') {
+      await this.prisma.job.update({
+        where: { id: application.jobId },
+        data: { status: 'CLOSED' }
+      });
+    }
+
+    return updatedApp;
+  }
+
+  async upsertCandidateStatus(jobId: string, candidateId: string, companyId: string, status: 'APPLIED' | 'SCREENING' | 'REJECTED' | 'INTERVIEW' | 'HIRED') {
+    const job = await this.prisma.job.findUnique({ where: { id: jobId } });
+    if (!job || job.companyId !== companyId) throw new ForbiddenException('Not your job');
+
+    const updatedApp = await this.prisma.application.upsert({
+      where: {
+        jobId_candidateId: { jobId, candidateId }
+      },
+      update: { status },
+      create: { jobId, candidateId, status }
+    });
+
+    if (status === 'HIRED') {
+      await this.prisma.job.update({
+        where: { id: jobId },
+        data: { status: 'CLOSED' }
+      });
+    }
+
+    return updatedApp;
+  }
+
+  async getApplicationMessages(applicationId: string, user: any) {
+    const application = await this.prisma.application.findUnique({
+      where: { id: applicationId },
+      include: { job: true, candidate: true }
+    });
+
+    if (!application) throw new NotFoundException('Application not found');
+
+    // Validation
+    if (user.role === 'COMPANY') {
+      const company = await this.prisma.company.findUnique({ where: { userId: user.userId } });
+      if (!company || application.job.companyId !== company.id) throw new ForbiddenException('Not your job');
+    } else if (user.role === 'CANDIDATE') {
+      const candidate = await this.prisma.candidate.findUnique({ where: { userId: user.userId } });
+      if (!candidate || application.candidateId !== candidate.id) throw new ForbiddenException('Not your application');
+    }
+
+    return this.prisma.message.findMany({
+      where: { applicationId },
+      orderBy: { createdAt: 'asc' }
+    });
+  }
+
+  async sendMessage(applicationId: string, user: any, content: string) {
+    const application = await this.prisma.application.findUnique({
+      where: { id: applicationId },
+      include: { job: true, candidate: true }
+    });
+
+    if (!application) throw new NotFoundException('Application not found');
+
+    let senderId = '';
+    
+    // Validation
+    if (user.role === 'COMPANY') {
+      const company = await this.prisma.company.findUnique({ where: { userId: user.userId } });
+      if (!company || application.job.companyId !== company.id) throw new ForbiddenException('Not your job');
+      senderId = company.id;
+    } else if (user.role === 'CANDIDATE') {
+      const candidate = await this.prisma.candidate.findUnique({ where: { userId: user.userId } });
+      if (!candidate || application.candidateId !== candidate.id) throw new ForbiddenException('Not your application');
+      senderId = candidate.id;
+    } else {
+      throw new ForbiddenException('Invalid role');
+    }
+
+    return this.prisma.message.create({
+      data: {
+        applicationId,
+        senderId,
+        senderRole: user.role,
+        content
+      }
     });
   }
 }

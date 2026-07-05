@@ -59,11 +59,40 @@ export class JobsController {
   @Patch('applications/:id/status')
   async updateApplicationStatus(
     @Param('id') id: string,
-    @Body('status') status: 'SCREENING' | 'REJECTED',
+    @Body('status') status: 'SCREENING' | 'REJECTED' | 'INTERVIEW' | 'HIRED',
     @Request() req: any
   ) {
     const company = await this.companiesService.findByUser(req.user.userId);
     if (!company) throw new Error('Company profile not found');
     return this.jobsService.updateApplicationStatus(id, company.id, status);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':jobId/candidates/:candidateId/status')
+  async upsertCandidateStatus(
+    @Param('jobId') jobId: string,
+    @Param('candidateId') candidateId: string,
+    @Body('status') status: 'APPLIED' | 'SCREENING' | 'REJECTED' | 'INTERVIEW' | 'HIRED',
+    @Request() req: any
+  ) {
+    const company = await this.companiesService.findByUser(req.user.userId);
+    if (!company) throw new Error('Company profile not found');
+    return this.jobsService.upsertCandidateStatus(jobId, candidateId, company.id, status);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('applications/:id/messages')
+  async getMessages(@Param('id') id: string, @Request() req: any) {
+    return this.jobsService.getApplicationMessages(id, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('applications/:id/messages')
+  async sendMessage(
+    @Param('id') id: string,
+    @Body('content') content: string,
+    @Request() req: any
+  ) {
+    return this.jobsService.sendMessage(id, req.user, content);
   }
 }

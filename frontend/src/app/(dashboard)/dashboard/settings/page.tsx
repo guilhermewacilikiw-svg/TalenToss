@@ -66,12 +66,12 @@ export default function CompanySettings() {
           <h2 className="text-3xl font-bold tracking-tight text-gray-900">Canal da Empresa</h2>
           <p className="text-muted-foreground mt-1">Gerencie as informações públicas da sua empresa para os candidatos.</p>
         </div>
-        <Button variant="outline" asChild className="shrink-0 w-full md:w-auto">
-          <Link href="/vagas" target="_blank">
+        <Link href="/vagas" target="_blank" className="shrink-0 w-full md:w-auto">
+          <Button variant="outline" className="w-full">
             <ExternalLink className="w-4 h-4 mr-2" />
             Visualizar Portal Público
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </div>
 
       <Card className="border-gray-200/60 shadow-sm">
