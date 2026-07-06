@@ -112,20 +112,16 @@ export class AiService {
     `;
 
     try {
-      const completion = await this.groq.chat.completions.create({
+      const chatCompletion = await this.groq.chat.completions.create({
         messages: [{ role: "user", content: prompt }],
-        model: "llama3-8b-8192",
-        temperature: 0.2,
-        response_format: { type: "json_object" }
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.1,
       });
 
-      const result = completion.choices[0]?.message?.content;
-      if (!result) throw new Error("Falha ao gerar estrutura da vaga");
-      
-      return JSON.parse(result);
+      return chatCompletion.choices[0]?.message?.content?.trim() || title;
     } catch (error) {
       this.logger.error('Failed to structure job profile', error);
-      return { title, description, requirements };
+      return `${title} ${requirements.join(' ')}`;
     }
   }
 
