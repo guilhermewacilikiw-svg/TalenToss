@@ -89,12 +89,6 @@ export default function PublicCareersPage() {
                     <div className="flex-1">
                       <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-primary transition-colors">{job.title}</h3>
                       <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-4">
-                        {job.location && (
-                          <div className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {job.location}</div>
-                        )}
-                        {job.salaryRange && (
-                          <div className="flex items-center gap-1"><DollarSign className="w-4 h-4" /> {job.salaryRange}</div>
-                        )}
                         <div className="flex items-center gap-1"><Briefcase className="w-4 h-4" /> Tempo Integral</div>
                       </div>
                       <p className="text-sm text-slate-600 line-clamp-2">{job.description}</p>

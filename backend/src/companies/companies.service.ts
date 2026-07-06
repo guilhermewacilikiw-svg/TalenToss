@@ -45,8 +45,6 @@ export class CompaniesService {
             title: true,
             description: true,
             requirements: true,
-            location: true,
-            salaryRange: true,
             createdAt: true,
           }
         }
