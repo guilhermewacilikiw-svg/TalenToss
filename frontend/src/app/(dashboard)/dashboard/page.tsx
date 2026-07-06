@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Users, Briefcase, Sparkles, TrendingUp, Star, Loader2, Plus, ChevronRight } from "lucide-react";
+import { Users, Briefcase, Sparkles, TrendingUp, Star, Loader2, Plus, ChevronRight, Clock } from "lucide-react";
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
