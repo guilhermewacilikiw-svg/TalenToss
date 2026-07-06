@@ -4,7 +4,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import type { Response } from 'express';
 import { PrismaService } from '../prisma/prisma.service';
 
-@Controller(['google', 'api/google'])
+@Controller()
 export class GoogleController {
   constructor(
     private readonly googleService: GoogleService,
@@ -12,7 +12,7 @@ export class GoogleController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('auth')
+  @Get(['google/auth', 'api/google/auth'])
   async getAuthUrl(@Request() req: any) {
     const company = await this.prisma.company.findUnique({ where: { userId: req.user.userId } });
     if (!company) {
@@ -22,7 +22,7 @@ export class GoogleController {
     return { url };
   }
 
-  @Get('callback')
+  @Get(['google/callback', 'api/google/callback'])
   async handleCallback(@Query('code') code: string, @Query('state') companyId: string, @Res() res: Response) {
     try {
       if (code && companyId) {
@@ -39,7 +39,7 @@ export class GoogleController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('status')
+  @Get(['google/status', 'api/google/status'])
   async getStatus(@Request() req: any) {
     const company = await this.prisma.company.findUnique({ where: { userId: req.user.userId } });
     if (!company) return { connected: false };
@@ -47,7 +47,7 @@ export class GoogleController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('disconnect')
+  @Post(['google/disconnect', 'api/google/disconnect'])
   async disconnect(@Request() req: any) {
     const company = await this.prisma.company.findUnique({ where: { userId: req.user.userId } });
     if (company) {
