@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Users, Briefcase, Sparkles, TrendingUp, Star, Loader2 } from "lucide-react";
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend
+} from 'recharts';
 import Link from 'next/link';
-import { api } from '@/lib/api';
-import { Briefcase, Users, Star, Clock, Plus, ArrowUpRight, CheckCircle2, ChevronRight, Activity, Bot } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-export default function DashboardOverview() {
-  const [company, setCompany] = useState<any>(null);
-  const [stats, setStats] = useState({ jobs: 0, candidates: 0, matches: 0, interviews: 0 });
+const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+
+export default function DashboardPage() {
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

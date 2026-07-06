@@ -43,9 +43,15 @@ export default function LoginPage() {
       const loggedInRole = res.data.role;
       
       const searchParamsObj = new URLSearchParams(window.location.search);
-      const redirectPath = searchParamsObj.get('redirect');
+      let redirectPath = searchParamsObj.get('redirect');
+      
+      const intendedJob = localStorage.getItem('intended_job_apply');
+      if (redirectPath === 'apply' && intendedJob) {
+        redirectPath = `/candidate/dashboard?applyJobId=${intendedJob}`;
+        localStorage.removeItem('intended_job_apply');
+      }
 
-      if (redirectPath) {
+      if (redirectPath && redirectPath !== 'apply') {
         router.push(redirectPath);
       } else if (loggedInRole === 'COMPANY' || loggedInRole === 'ADMIN') {
         router.push('/dashboard');
