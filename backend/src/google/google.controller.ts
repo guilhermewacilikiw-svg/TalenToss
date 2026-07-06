@@ -12,23 +12,23 @@ export class GoogleController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get(['google/auth', 'api/google/auth'])
+  @Get('google/auth')
   async getAuthUrl(@Request() req: any) {
     const company = await this.prisma.company.findUnique({ where: { userId: req.user.userId } });
-    if (!company) {
-      throw new Error('Empresa não encontrada');
-    }
-    const url = this.googleService.getAuthUrl(company.id);
-    return { url };
+    if (!company) throw new Error('Empresa não encontrada');
+    return { url: this.googleService.getAuthUrl(company.id) };
   }
 
-  @Get(['google/callback', 'api/google/callback'])
+  @UseGuards(JwtAuthGuard)
+  @Get('api/google/auth')
+  async getAuthUrlApi(@Request() req: any) {
+    return this.getAuthUrl(req);
+  }
+
+  @Get('google/callback')
   async handleCallback(@Query('code') code: string, @Query('state') companyId: string, @Res() res: Response) {
     try {
-      if (code && companyId) {
-        await this.googleService.handleCallback(code, companyId);
-      }
-      // Redirect back to frontend
+      if (code && companyId) await this.googleService.handleCallback(code, companyId);
       const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
       return res.redirect(`${frontendUrl}/dashboard/interviews?connected=true`);
     } catch (err) {
@@ -38,8 +38,13 @@ export class GoogleController {
     }
   }
 
+  @Get('api/google/callback')
+  async handleCallbackApi(@Query('code') code: string, @Query('state') companyId: string, @Res() res: Response) {
+    return this.handleCallback(code, companyId, res);
+  }
+
   @UseGuards(JwtAuthGuard)
-  @Get(['google/status', 'api/google/status'])
+  @Get('google/status')
   async getStatus(@Request() req: any) {
     const company = await this.prisma.company.findUnique({ where: { userId: req.user.userId } });
     if (!company) return { connected: false };
@@ -47,12 +52,22 @@ export class GoogleController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post(['google/disconnect', 'api/google/disconnect'])
+  @Get('api/google/status')
+  async getStatusApi(@Request() req: any) {
+    return this.getStatus(req);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('google/disconnect')
   async disconnect(@Request() req: any) {
     const company = await this.prisma.company.findUnique({ where: { userId: req.user.userId } });
-    if (company) {
-      await this.googleService.disconnect(company.id);
-    }
+    if (company) await this.googleService.disconnect(company.id);
     return { success: true };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('api/google/disconnect')
+  async disconnectApi(@Request() req: any) {
+    return this.disconnect(req);
   }
 }
