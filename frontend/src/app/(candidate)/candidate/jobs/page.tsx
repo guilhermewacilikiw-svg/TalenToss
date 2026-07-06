@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Briefcase, Building2, CheckCircle2, ChevronRight } from 'lucide-react';
 
 export default function CandidateJobsFeed() {
@@ -105,20 +106,47 @@ export default function CandidateJobsFeed() {
                   )}
                 </div>
               </CardContent>
-              <CardFooter className="pt-4 border-t mt-auto">
+              <CardFooter className="pt-4 border-t mt-auto flex gap-2">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="flex-1">Ver Detalhes</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">{job.title}</DialogTitle>
+                      <DialogDescription className="flex items-center gap-1.5 text-base mt-2">
+                        <Building2 className="w-4 h-4" /> {job.company?.name || 'Empresa Confidencial'}
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4 space-y-6">
+                      <div>
+                        <h4 className="font-semibold text-slate-900 mb-2">Descrição da Vaga</h4>
+                        <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">{job.description}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-slate-900 mb-2">Requisitos</h4>
+                        <ul className="list-disc pl-5 text-slate-600 space-y-1">
+                          {job.requirements?.map((req: string, i: number) => (
+                            <li key={i}>{req}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
                 {applied[job.id] ? (
-                  <Button variant="secondary" className="w-full text-green-600 bg-green-500/10 hover:bg-green-500/20" disabled>
+                  <Button variant="secondary" className="flex-1 text-green-600 bg-green-500/10 hover:bg-green-500/20" disabled>
                     <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Aplicação Enviada
+                    Enviada
                   </Button>
                 ) : (
                   <Button 
-                    className="w-full group-hover:bg-primary/90 transition-colors"
+                    className="flex-1 group-hover:bg-primary/90 transition-colors"
                     onClick={() => handleApply(job.id)}
                     disabled={applying === job.id}
                   >
-                    {applying === job.id ? 'Analisando perfil...' : 'Aplicar para esta vaga'}
-                    {!applying && <ChevronRight className="w-4 h-4 ml-1 opacity-70 group-hover:translate-x-1 transition-transform" />}
+                    {applying === job.id ? 'Aguarde...' : 'Aplicar'}
                   </Button>
                 )}
               </CardFooter>

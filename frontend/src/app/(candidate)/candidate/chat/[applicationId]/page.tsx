@@ -10,6 +10,7 @@ import Link from "next/link";
 
 export default function ChatInterviewPage() {
   const params = useParams();
+  const router = useRouter();
   const applicationId = params.applicationId as string;
   
   const [messages, setMessages] = useState<any[]>([]);
@@ -89,8 +90,8 @@ export default function ChatInterviewPage() {
     <div className="max-w-3xl mx-auto h-[85vh] flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
       {/* Header */}
       <div className="bg-slate-50 border-b border-slate-200 p-4 flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="/candidate/dashboard"><ArrowLeft className="w-5 h-5" /></Link>
+        <Button variant="ghost" size="icon" onClick={() => router.push('/candidate/dashboard')}>
+          <ArrowLeft className="w-5 h-5" />
         </Button>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">

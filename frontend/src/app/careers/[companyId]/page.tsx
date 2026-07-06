@@ -61,11 +61,6 @@ export default function PublicCareersPage() {
           <div className="text-center md:text-left flex-1 mt-4 md:mt-0">
             <h1 className="text-4xl font-bold text-slate-900 mb-2">{company.name}</h1>
             <p className="text-lg text-slate-600 mb-4 max-w-2xl">{company.description || "Venha fazer parte do nosso time!"}</p>
-            {company.website && (
-              <a href={company.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
-                Visitar Website &rarr;
-              </a>
-            )}
           </div>
         </div>
       </div>

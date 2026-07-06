@@ -35,7 +35,6 @@ export class CompaniesService {
         id: true,
         name: true,
         description: true,
-        website: true,
         logoUrl: true,
         jobs: {
           where: { status: 'OPEN' },
