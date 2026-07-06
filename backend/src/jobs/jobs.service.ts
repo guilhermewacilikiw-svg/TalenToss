@@ -118,7 +118,8 @@ export class JobsService {
       resultsMap.set(m.id, {
         ...m,
         match_score: Math.round(m.match_score || 0),
-        application_status: 'APPLIED' // Coluna 'Novos/Recomendados'
+        application_status: 'APPLIED', // Coluna 'Novos/Recomendados'
+        is_manual_applicant: false
       });
     }
 
@@ -128,6 +129,7 @@ export class JobsService {
       if (existing) {
         existing.application_status = app.status;
         if (app.matchScore) existing.match_score = Math.round(app.matchScore);
+        existing.is_manual_applicant = true;
       } else {
         resultsMap.set(app.candidateId, {
           id: app.candidate.id,
@@ -136,7 +138,8 @@ export class JobsService {
           headline: app.candidate.headline,
           employabilityScore: app.candidate.employabilityScore,
           match_score: Math.round(app.matchScore || 0),
-          application_status: app.status
+          application_status: app.status,
+          is_manual_applicant: true
         });
       }
     }

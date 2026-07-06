@@ -154,10 +154,19 @@ export default function JobKanbanPage({ params }: { params: { id: string } }) {
                     <CardContent className="p-3">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-semibold text-sm leading-tight">{c.firstName} {c.lastName}</h4>
-                        <div className="flex items-center gap-1 bg-primary/10 text-primary px-1.5 py-0.5 rounded text-xs font-bold">
-                          <Star className="w-3 h-3 fill-primary" /> {c.employabilityScore}
+                        <div className="flex flex-col items-end gap-1">
+                          <div className="flex items-center gap-1 bg-primary/10 text-primary px-1.5 py-0.5 rounded text-xs font-bold">
+                            <Star className="w-3 h-3 fill-primary" /> {c.employabilityScore}
+                          </div>
                         </div>
                       </div>
+                      
+                      {c.is_manual_applicant && (
+                        <div className="inline-flex items-center bg-purple-100 text-purple-700 text-[10px] font-bold px-1.5 py-0.5 rounded mb-2 border border-purple-200">
+                          🎯 Candidatou-se
+                        </div>
+                      )}
+                      
                       <p className="text-xs text-muted-foreground line-clamp-2 mb-3">{c.headline}</p>
                       
                       <div className="flex items-center gap-2 justify-between">

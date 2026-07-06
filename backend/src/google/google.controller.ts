@@ -4,7 +4,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import type { Response } from 'express';
 import { PrismaService } from '../prisma/prisma.service';
 
-@Controller('google')
+@Controller(['google', 'api/google'])
 export class GoogleController {
   constructor(
     private readonly googleService: GoogleService,
