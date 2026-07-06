@@ -57,6 +57,18 @@ export class CandidatesController {
     return this.candidatesService.getMyApplications(req.user.userId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('applications/:id/chat')
+  async getChatHistory(@Request() req: any, @Param('id') id: string) {
+    return this.candidatesService.getChatHistory(req.user.userId, id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('applications/:id/chat')
+  async sendChatMessage(@Request() req: any, @Param('id') id: string, @Body('content') content: string) {
+    return this.candidatesService.sendChatMessage(req.user.userId, id, content);
+  }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('COMPANY', 'ADMIN')
   @Get(':id')

@@ -112,17 +112,59 @@ export class AiService {
     `;
 
     try {
-      const chatCompletion = await this.groq.chat.completions.create({
+      const completion = await this.groq.chat.completions.create({
         messages: [{ role: "user", content: prompt }],
-        model: "llama-3.3-70b-versatile",
-        temperature: 0.1,
+        model: "llama3-8b-8192",
+        temperature: 0.2,
+        response_format: { type: "json_object" }
       });
 
-      return chatCompletion.choices[0]?.message?.content?.trim() || title;
+      const result = completion.choices[0]?.message?.content;
+      if (!result) throw new Error("Falha ao gerar estrutura da vaga");
+      
+      return JSON.parse(result);
     } catch (error) {
       this.logger.error('Failed to structure job profile', error);
-      return `${title} ${requirements.join(' ')}`;
+      return { title, description, requirements };
     }
+  }
+
+  async conductInterview(job: any, candidate: any, chatHistory: any[]) {
+    const apiKey = this.configService.get<string>('GROQ_API_KEY');
+    if (!apiKey || apiKey === 'dummy-key') {
+      return "[ENTREVISTA_FINALIZADA]\nResumo: O candidato respondeu bem às perguntas simuladas na versão de demonstração (sem API Key).";
+    }
+
+    const systemPrompt = `
+      Você é uma IA de Triagem Técnica chamada "TalenToss Bot". Você está entrevistando o candidato ${candidate.firstName} ${candidate.lastName} para a vaga de "${job.title}".
+      
+      Regras da Entrevista:
+      1. Você deve fazer perguntas curtas, amigáveis e direto ao ponto.
+      2. Baseie suas perguntas EXCLUSIVAMENTE nos requisitos da vaga: ${job.requirements.join(', ')}.
+      3. Faça UMA pergunta de cada vez. Espere o candidato responder antes de fazer a próxima.
+      4. O limite máximo de perguntas é 3. Você deve contar as perguntas baseando-se no histórico da conversa.
+      5. Se for a primeira mensagem, cumprimente o candidato pelo nome, explique que fará 3 perguntinhas rápidas e já faça a primeira pergunta.
+      6. Após a 3ª resposta do candidato, você NÃO DEVE fazer mais perguntas. Você deve OBRIGATORIAMENTE iniciar sua última mensagem com a tag secreta [ENTREVISTA_FINALIZADA], seguida de um agradecimento e um resumo de 1 parágrafo avaliando as respostas técnicas do candidato.
+      7. Mantenha o tom profissional, mas leve. Responda na mesma língua que o candidato usar (priorize Português PT-BR).
+    `;
+
+    const messages = [
+      { role: "system", content: systemPrompt },
+      ...chatHistory.map(msg => ({
+        role: msg.senderRole === 'CANDIDATE' ? 'user' : 'assistant',
+        content: msg.content
+      }))
+    ];
+
+    const completion = await this.groq.chat.completions.create({
+      messages: messages as any,
+      model: "llama3-8b-8192",
+      temperature: 0.5,
+      max_tokens: 300
+    });
+
+    const response = completion.choices[0]?.message?.content;
+    return response || "Houve um erro na comunicação. Por favor, tente novamente.";
   }
 
   async generateEmbedding(text: string): Promise<number[]> {

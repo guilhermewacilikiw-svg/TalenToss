@@ -155,13 +155,32 @@ export class CandidatesService {
 
     const matchScore = matches.length > 0 && matches[0].match_score ? Math.round(matches[0].match_score) : null;
 
-    return this.prisma.application.create({
+    const application = await this.prisma.application.create({
       data: {
         jobId,
         candidateId: candidate.id,
         matchScore,
       }
     });
+
+    const job = await this.prisma.job.findUnique({ where: { id: jobId } });
+    
+    if (job) {
+      // 1. Chamar o Bot para iniciar a conversa
+      const botResponse = await this.ai.conductInterview(job, candidate, []);
+
+      // 2. Salvar a resposta do Bot
+      await this.prisma.message.create({
+        data: {
+          applicationId: application.id,
+          senderId: job.companyId, // Mock as company
+          senderRole: 'COMPANY', // Treat AI as company representative
+          content: botResponse
+        }
+      });
+    }
+
+    return application;
   }
 
   async getMyApplications(userId: string) {
@@ -271,5 +290,74 @@ export class CandidatesService {
     }
 
     return candidate;
+  }
+
+  async getChatHistory(userId: string, applicationId: string) {
+    const candidate = await this.prisma.candidate.findUnique({ where: { userId } });
+    if (!candidate) throw new BadRequestException('Candidate not found');
+
+    const application = await this.prisma.application.findFirst({
+      where: { id: applicationId, candidateId: candidate.id },
+      include: { messages: { orderBy: { createdAt: 'asc' } } }
+    });
+
+    if (!application) throw new BadRequestException('Application not found');
+
+    return application.messages;
+  }
+
+  async sendChatMessage(userId: string, applicationId: string, content: string) {
+    const candidate = await this.prisma.candidate.findUnique({ where: { userId } });
+    if (!candidate) throw new BadRequestException('Candidate not found');
+
+    const application = await this.prisma.application.findFirst({
+      where: { id: applicationId, candidateId: candidate.id },
+      include: { 
+        job: true,
+        candidate: true,
+        messages: { orderBy: { createdAt: 'asc' } } 
+      }
+    });
+
+    if (!application) throw new BadRequestException('Application not found');
+
+    // 1. Salvar a mensagem do candidato
+    const userMsg = await this.prisma.message.create({
+      data: {
+        applicationId,
+        senderId: candidate.id,
+        senderRole: 'CANDIDATE',
+        content
+      }
+    });
+
+    // 2. Chamar o Bot para responder
+    const newHistory = [...application.messages, userMsg];
+    const botResponse = await this.ai.conductInterview(application.job, application.candidate, newHistory);
+
+    // 3. Salvar a resposta do Bot
+    const botMsg = await this.prisma.message.create({
+      data: {
+        applicationId,
+        senderId: application.job.companyId, // Mock as company
+        senderRole: 'COMPANY', // Treat AI as company representative
+        content: botResponse
+      }
+    });
+
+    // 4. Checar se a entrevista foi finalizada
+    if (botResponse.includes('[ENTREVISTA_FINALIZADA]')) {
+      const summary = botResponse.replace('[ENTREVISTA_FINALIZADA]', '').trim();
+      
+      await this.prisma.application.update({
+        where: { id: applicationId },
+        data: { 
+          aiAnalysis: summary + '\n\n(Triagem feita por Chatbot)',
+          status: 'APPLIED' 
+        }
+      });
+    }
+
+    return botMsg;
   }
 }

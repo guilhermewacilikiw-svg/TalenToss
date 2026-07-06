@@ -39,10 +39,10 @@ export default function CandidateDashboard() {
       if (applyJobId && isDone) {
         setApplyStatus('applying');
         try {
-          await api.post(`/candidates/apply/${applyJobId}`);
+          const applyRes = await api.post(`/candidates/apply/${applyJobId}`);
           setApplyStatus('success');
-          // Clear query params to prevent applying again on refresh
-          window.history.replaceState({}, document.title, window.location.pathname);
+          // Redirect to the chat interview
+          window.location.href = `/candidate/chat/${applyRes.data.id}`;
         } catch (err) {
           console.error(err);
           setApplyStatus('error');

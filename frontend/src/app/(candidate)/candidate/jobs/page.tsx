@@ -41,8 +41,10 @@ export default function CandidateJobsFeed() {
   const handleApply = async (jobId: string) => {
     setApplying(jobId);
     try {
-      await api.post(`/candidates/apply/${jobId}`);
+      const res = await api.post(`/candidates/apply/${jobId}`);
       setApplied((prev) => ({ ...prev, [jobId]: true }));
+      // Redirect to the chat interview
+      window.location.href = `/candidate/chat/${res.data.id}`;
     } catch (err) {
       console.error('Failed to apply', err);
       alert('Erro ao aplicar. Certifique-se de ter feito upload do currículo primeiro!');
