@@ -48,6 +48,14 @@ export default function DashboardPage() {
     }
   };
 
+  if (loading || !stats) {
+    return (
+      <div className="h-[80vh] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto animate-in fade-in duration-500">
       
